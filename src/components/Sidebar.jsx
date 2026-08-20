@@ -23,6 +23,9 @@ export default function Sidebar() {
         <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
           Overview
         </NavLink>
+        <NavLink to="/analytics" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
+          Analytics
+        </NavLink>
         <NavLink to="/upload" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
           Upload data
         </NavLink>

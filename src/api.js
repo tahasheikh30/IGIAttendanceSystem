@@ -8,6 +8,7 @@ export const getDepartment = (dept, days = 30) =>
   api.get(`/departments/${encodeURIComponent(dept)}?days=${days}`).then(r => r.data);
 export const getEmployee = (empNo, days = 365) =>
   api.get(`/employees/${encodeURIComponent(empNo)}?days=${days}`).then(r => r.data);
+export const getAnalytics = (days = 90) => api.get(`/analytics?days=${days}`).then(r => r.data);
 export const getUploads = () => api.get("/uploads").then(r => r.data);
 export const uploadFile = (file, onProgress) => {
   const form = new FormData();
