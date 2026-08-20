@@ -1,0 +1,190 @@
+:root {
+  --bg: #F5F7FA;
+  --surface: #ffffff;
+  --surface-muted: #EEF3F8;
+  --border: #DCE3EC;
+  --text: #1E2530;
+  --text-secondary: #5B6472;
+  --text-muted: #94A0B0;
+  /* Packages Group blue, sampled from the IGI / Packages Group wordmarks */
+  --accent: #1C74B8;
+  --accent-dark: #12507F;
+  --accent-light: #E4F0FA;
+  --danger: #C0432A;
+  --danger-light: #FAECE7;
+  --warn: #A5680B;
+  --warn-light: #FAEEDA;
+  --radius: 10px;
+  --sidebar-w: 240px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 20px; }
+.brand-logo { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
+.brand-title { font-weight: 600; font-size: 14px; }
+.brand-sub { font-size: 12px; color: var(--text-muted); }
+
+.sidebar-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.footer-logo { width: 100%; max-width: 190px; object-fit: contain; opacity: 0.9; }
+.footer-caption { font-size: 10.5px; color: var(--text-muted); }
+
+.nav-section { display: flex; flex-direction: column; gap: 2px; }
+.nav-section.scroll { overflow-y: auto; flex: 1; }
+.nav-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); padding: 16px 10px 6px; }
+.nav-link {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 10px; border-radius: 8px;
+  font-size: 13.5px; color: var(--text-secondary); text-decoration: none;
+}
+.nav-link:hover { background: var(--surface-muted); }
+.nav-link.active { background: var(--accent-light); color: var(--accent); font-weight: 500; }
+.nav-link.dept span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nav-count { font-size: 11px; color: var(--text-muted); }
+.nav-link.active .nav-count { color: var(--accent); }
+.nav-empty { font-size: 12px; color: var(--text-muted); padding: 8px 10px; }
+
+/* ---------- Main content ---------- */
+.main-content { flex: 1; padding: 28px 36px 60px; max-width: 1180px; }
+
+.page-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+h1 { font-size: 22px; font-weight: 600; margin: 0; }
+.page-sub { font-size: 13px; color: var(--text-secondary); margin: 4px 0 0; }
+
+.range-toggle { display: flex; gap: 6px; }
+.chip {
+  border: 1px solid var(--border); background: var(--surface);
+  border-radius: 999px; padding: 5px 12px; font-size: 12.5px; color: var(--text-secondary);
+  cursor: pointer;
+}
+.chip-active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; flex: 1; min-width: 150px; }
+.stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.stat-value { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.stat-value.tone-danger { color: var(--danger); }
+.stat-value.tone-warn { color: var(--warn); }
+.stat-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
+.card-danger { background: var(--danger-light); border-color: #EEC7B7; color: #8a3016; }
+.card-success { background: var(--accent-light); border-color: #B8D8EE; color: var(--accent-dark); }
+
+.section-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.hint { font-size: 12px; color: var(--text-muted); margin: 0 0 12px; }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { text-align: left; padding: 8px 10px; color: var(--text-muted); font-weight: 500; font-size: 12px; border-bottom: 1px solid var(--border); }
+.data-table td { padding: 9px 10px; border-bottom: 1px solid var(--border); }
+.data-table tbody tr { cursor: pointer; }
+.data-table tbody tr:hover { background: var(--surface-muted); }
+.td-name { font-weight: 500; }
+.td-muted { color: var(--text-secondary); }
+.td-danger { color: var(--danger); font-weight: 500; }
+.td-warn { color: var(--warn); font-weight: 500; }
+
+.badge-danger {
+  display: inline-block; margin-left: 8px; padding: 2px 8px;
+  background: var(--danger-light); color: var(--danger);
+  border-radius: 999px; font-size: 11px; font-weight: 500; vertical-align: middle;
+}
+
+.table-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.toolbar-controls { display: flex; gap: 8px; }
+.input, .select { border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 13px; background: var(--surface); }
+
+.empty-state { padding: 60px 20px; text-align: center; color: var(--text-secondary); }
+.empty-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+
+/* ---------- Upload page ---------- */
+.dropzone {
+  border: 2px dashed var(--border); border-radius: 14px;
+  padding: 44px 20px; text-align: center; cursor: pointer;
+  background: var(--surface); margin-bottom: 20px;
+}
+.dropzone.dragging { border-color: var(--accent); background: var(--accent-light); }
+.dropzone-title { font-size: 15px; font-weight: 500; }
+.dropzone-sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+/* ---------- Employee drawer ---------- */
+.drawer-overlay {
+  position: fixed; inset: 0; background: rgba(20,20,18,0.4);
+  display: flex; justify-content: flex-end; z-index: 50;
+}
+.drawer {
+  width: min(560px, 92vw); background: var(--surface); height: 100%;
+  padding: 26px 28px; overflow-y: auto; box-shadow: -8px 0 24px rgba(0,0,0,0.08);
+}
+.drawer-loading { color: var(--text-muted); }
+.drawer-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.drawer-name { font-size: 17px; font-weight: 600; }
+.drawer-sub { font-size: 12.5px; color: var(--text-secondary); margin-top: 2px; }
+.btn-ghost { border: none; background: none; color: var(--text-secondary); font-size: 13px; cursor: pointer; }
+
+.cal-strip { display: flex; flex-wrap: wrap; gap: 3px; margin: 10px 0; }
+.cal-cell { width: 13px; height: 13px; border-radius: 3px; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--text-muted); }
+.legend-swatch { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+/* ---------- About page ---------- */
+.tribute-card {
+  display: flex;
+  gap: 28px;
+  background: linear-gradient(135deg, #12222F 0%, #1C3A52 55%, #1C74B8 100%);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+.tribute-portrait {
+  width: 140px; height: 140px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  border: 3px solid rgba(255,255,255,0.5);
+}
+.tribute-eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+.tribute-heading { font-size: 24px; font-weight: 600; margin: 4px 0 2px; }
+.tribute-subheading { font-size: 13.5px; color: rgba(255,255,255,0.8); margin-bottom: 14px; }
+.tribute-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 10px; max-width: 560px; }
+.group-banner { width: 100%; border-radius: 10px; margin-top: 10px; }
+
+@media (max-width: 640px) {
+  .tribute-card { flex-direction: column; align-items: flex-start; }
+}
