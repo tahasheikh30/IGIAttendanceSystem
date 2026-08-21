@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend } from "recharts";
-import { getEmployee } from "../api";
+import { getEmployee, employeeReportUrl } from "../api";
 import StatCard from "./StatCard";
 import CalendarStrip, { CodeLegend } from "./CalendarStrip";
 
@@ -40,16 +40,21 @@ export default function EmployeeDrawer({ empNo, onClose }) {
               <button className="btn-ghost" onClick={onClose}>Close ×</button>
             </div>
 
-            <div className="range-toggle">
-              {[30, 90, 180, 365].map(r => (
-                <button
-                  key={r}
-                  className={"chip" + (range === r ? " chip-active" : "")}
-                  onClick={() => setRange(r)}
-                >
-                  {r === 365 ? "1 year" : `${r}d`}
-                </button>
-              ))}
+            <div className="header-actions" style={{ marginBottom: 16 }}>
+              <div className="range-toggle">
+                {[30, 90, 180, 365].map(r => (
+                  <button
+                    key={r}
+                    className={"chip" + (range === r ? " chip-active" : "")}
+                    onClick={() => setRange(r)}
+                  >
+                    {r === 365 ? "1 year" : `${r}d`}
+                  </button>
+                ))}
+              </div>
+              <a className="btn-primary btn-small" href={employeeReportUrl(empNo, range)} target="_blank" rel="noreferrer">
+                Download PDF
+              </a>
             </div>
 
             {s && (

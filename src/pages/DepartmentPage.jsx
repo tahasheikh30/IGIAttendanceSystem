@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getDepartment } from "../api";
+import { getDepartment, departmentReportUrl } from "../api";
 import StatCard from "../components/StatCard";
 import EmployeeDrawer from "../components/EmployeeDrawer";
 import { useRange } from "../context/RangeContext";
@@ -48,12 +48,17 @@ export default function DepartmentPage() {
           <h1>{dept}</h1>
           <p className="page-sub">{kpis.employees} employees · last {days} days</p>
         </div>
-        <div className="range-toggle">
-          {[30, 90, 180, 365].map(r => (
-            <button key={r} className={"chip" + (days === r ? " chip-active" : "")} onClick={() => setDays(r)}>
-              {r === 365 ? "1 year" : `${r}d`}
-            </button>
-          ))}
+        <div className="header-actions">
+          <div className="range-toggle">
+            {[30, 90, 180, 365].map(r => (
+              <button key={r} className={"chip" + (days === r ? " chip-active" : "")} onClick={() => setDays(r)}>
+                {r === 365 ? "1 year" : `${r}d`}
+              </button>
+            ))}
+          </div>
+          <a className="btn-primary" href={departmentReportUrl(dept, days)} target="_blank" rel="noreferrer">
+            Download PDF report
+          </a>
         </div>
       </div>
 
