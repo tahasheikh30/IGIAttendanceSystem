@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getDepartment, departmentReportUrl } from "../api";
+import { getDepartment, downloadDepartmentReport } from "../api";
 import StatCard from "../components/StatCard";
 import EmployeeDrawer from "../components/EmployeeDrawer";
 import { useRange } from "../context/RangeContext";
@@ -12,7 +12,19 @@ export default function DepartmentPage() {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("anomalyScore");
   const [openEmp, setOpenEmp] = useState(null);
+  const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState(null);
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      await downloadDepartmentReport(dept, days);
+    } catch {
+      window.alert("Couldn't generate the report — try again.");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   useEffect(() => {
     setError(null);
@@ -56,9 +68,9 @@ export default function DepartmentPage() {
               </button>
             ))}
           </div>
-          <a className="btn-primary" href={departmentReportUrl(dept, days)} target="_blank" rel="noreferrer">
-            Download PDF report
-          </a>
+          <button className="btn-primary" onClick={handleDownload} disabled={downloading}>
+            {downloading ? "Generating…" : "Download PDF report"}
+          </button>
         </div>
       </div>
 

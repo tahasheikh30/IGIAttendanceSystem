@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend } from "recharts";
-import { getEmployee, employeeReportUrl } from "../api";
+import { getEmployee, downloadEmployeeReport } from "../api";
 import StatCard from "./StatCard";
 import CalendarStrip, { CodeLegend } from "./CalendarStrip";
 
@@ -8,6 +8,7 @@ export default function EmployeeDrawer({ empNo, onClose }) {
   const [data, setData] = useState(null);
   const [range, setRange] = useState(90);
   const [loading, setLoading] = useState(true);
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -15,6 +16,17 @@ export default function EmployeeDrawer({ empNo, onClose }) {
   }, [empNo, range]);
 
   if (!empNo) return null;
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try {
+      await downloadEmployeeReport(empNo, data?.name || empNo, range);
+    } catch {
+      window.alert("Couldn't generate the report — try again.");
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const trend = (data?.days || [])
     .filter(d => d.code !== "R" && d.code !== "H")
@@ -52,9 +64,9 @@ export default function EmployeeDrawer({ empNo, onClose }) {
                   </button>
                 ))}
               </div>
-              <a className="btn-primary btn-small" href={employeeReportUrl(empNo, range)} target="_blank" rel="noreferrer">
-                Download PDF
-              </a>
+              <button className="btn-primary btn-small" onClick={handleDownload} disabled={downloading}>
+                {downloading ? "Generating…" : "Download PDF"}
+              </button>
             </div>
 
             {s && (

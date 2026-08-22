@@ -1,9 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDepartments } from "../api";
+import { useAuth } from "../context/AuthContext";
 
 export default function Sidebar() {
   const [depts, setDepts] = useState([]);
+  const { logout } = useAuth();
 
   useEffect(() => {
     getDepartments().then(setDepts).catch(() => setDepts([]));
@@ -50,6 +52,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
+        <button className="btn-ghost logout-btn" onClick={logout}>Sign out</button>
         <img src="/assets/packages-group.jpg" alt="Packages Group" className="footer-logo" />
         <div className="footer-caption">Part of Packages Group</div>
       </div>

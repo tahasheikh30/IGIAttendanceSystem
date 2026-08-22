@@ -5,9 +5,11 @@ import DepartmentPage from "./pages/DepartmentPage";
 import UploadPage from "./pages/UploadPage";
 import AboutPage from "./pages/AboutPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
+import LoginPage from "./pages/LoginPage";
 import { RangeProvider } from "./context/RangeContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
-export default function App() {
+function AuthedApp() {
   return (
     <RangeProvider>
       <div className="app-shell">
@@ -23,5 +25,18 @@ export default function App() {
         </main>
       </div>
     </RangeProvider>
+  );
+}
+
+function Gate() {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <AuthedApp /> : <LoginPage />;
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <Gate />
+    </AuthProvider>
   );
 }
