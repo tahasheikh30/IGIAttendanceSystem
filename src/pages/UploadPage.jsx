@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { uploadFile, getUploads } from "../api";
+import { uploadFile, getUploads, deleteUpload } from "../api";
 
 export default function UploadPage() {
   const [dragging, setDragging] = useState(false);
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
   const [history, setHistory] = useState([]);
+  const [deletingId, setDeletingId] = useState(null);
   const inputRef = useRef();
 
   const refreshHistory = () => getUploads().then(setHistory).catch(() => {});
@@ -22,6 +23,21 @@ export default function UploadPage() {
     } catch (e) {
       setError(e?.response?.data?.detail || "Upload failed — check the file format");
       setStatus(null);
+    }
+  };
+
+  const handleDelete = async (id, filename) => {
+    if (!window.confirm(`Remove "${filename}" from upload history? This only removes the log entry — the attendance data it contributed stays intact.`)) {
+      return;
+    }
+    setDeletingId(id);
+    try {
+      await deleteUpload(id);
+      refreshHistory();
+    } catch {
+      window.alert("Couldn't remove that entry — try again.");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -69,7 +85,7 @@ export default function UploadPage() {
         <div className="section-label">Upload history</div>
         <table className="data-table">
           <thead>
-            <tr><th>File</th><th>Uploaded</th><th>Period</th><th>Rows</th><th>Employees</th></tr>
+            <tr><th>File</th><th>Uploaded</th><th>Period</th><th>Rows</th><th>Employees</th><th></th></tr>
           </thead>
           <tbody>
             {history.map(h => (
@@ -79,10 +95,19 @@ export default function UploadPage() {
                 <td className="td-muted">{h.period_start} → {h.period_end}</td>
                 <td>{h.row_count}</td>
                 <td>{h.employee_count}</td>
+                <td>
+                  <button
+                    className="btn-ghost"
+                    onClick={() => handleDelete(h.id, h.filename)}
+                    disabled={deletingId === h.id}
+                  >
+                    {deletingId === h.id ? "Removing…" : "Remove"}
+                  </button>
+                </td>
               </tr>
             ))}
             {history.length === 0 && (
-              <tr><td colSpan={5} className="td-muted">No uploads yet</td></tr>
+              <tr><td colSpan={6} className="td-muted">No uploads yet</td></tr>
             )}
           </tbody>
         </table>

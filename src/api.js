@@ -19,6 +19,7 @@ export const getEmployee = (empNo, days = 365) =>
   api.get(`/employees/${encodeURIComponent(empNo)}?days=${days}`).then(r => r.data);
 export const getAnalytics = (days = 90) => api.get(`/analytics?days=${days}`).then(r => r.data);
 export const getUploads = () => api.get("/uploads").then(r => r.data);
+export const deleteUpload = (id) => api.delete(`/uploads/${id}`).then(r => r.data);
 
 // PDF reports are served directly by the backend with a Content-Disposition
 // header, so a plain navigation (not an axios call) is enough to trigger
