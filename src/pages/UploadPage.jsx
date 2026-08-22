@@ -27,13 +27,18 @@ export default function UploadPage() {
   };
 
   const handleDelete = async (id, filename) => {
-    if (!window.confirm(`Remove "${filename}" from upload history? This only removes the log entry — the attendance data it contributed stays intact.`)) {
+    if (!window.confirm(
+      `Delete "${filename}" permanently?\n\nThis removes the log entry AND any attendance data still attributed to it — rows a later upload hasn't since overwritten. If another upload has since replaced the same dates, only the log entry goes; if not, that attendance data is gone for good. This cannot be undone.`
+    )) {
       return;
     }
     setDeletingId(id);
     try {
-      await deleteUpload(id);
+      const result = await deleteUpload(id);
       refreshHistory();
+      if (result.attendance_rows_deleted > 0) {
+        window.alert(`Removed the log entry and ${result.attendance_rows_deleted} attendance rows that were still attributed to it.`);
+      }
     } catch {
       window.alert("Couldn't remove that entry — try again.");
     } finally {
