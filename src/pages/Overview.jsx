@@ -23,7 +23,7 @@ export default function Overview() {
     );
   }
 
-  const { kpis, departments, topFlagged } = data;
+  const { kpis, departments, topFlagged, topPunctual } = data;
 
   return (
     <div>
@@ -47,7 +47,9 @@ export default function Overview() {
         <StatCard label="Chronic latecomers" value={kpis.chronicLate} sub="late 60%+ of days" tone="danger" />
         <StatCard label="Avg overtime" value={`${kpis.avgOtHours}h`} sub="per employee" />
         <StatCard label="Missing punches" value={kpis.totalMissing} tone="warn" />
+        <StatCard label="Short shifts" value={kpis.shortShiftTotal} sub="came late, left early" tone={kpis.shortShiftTotal > 0 ? "warn" : undefined} />
         <StatCard label="Flagged employees" value={kpis.flagged} tone="danger" />
+        <StatCard label="Punctual employees" value={kpis.punctual} tone="success" />
       </div>
 
       <div className="card">
@@ -78,6 +80,29 @@ export default function Overview() {
           </tbody>
         </table>
       </div>
+
+      {topPunctual && topPunctual.length > 0 && (
+        <div className="card">
+          <div className="section-label">Punctual employees</div>
+          <p className="hint">Never late, no missing punches, minimum 5 scheduled days</p>
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Department</th><th>Days on record</th>
+              </tr>
+            </thead>
+            <tbody>
+              {topPunctual.map(e => (
+                <tr key={e.empNo} onClick={() => setOpenEmp(e.empNo)}>
+                  <td className="td-name">{e.name} <span className="badge-success">Punctual</span></td>
+                  <td className="td-muted">{e.dept}</td>
+                  <td>{e.scheduled}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {openEmp && <EmployeeDrawer empNo={openEmp} onClose={() => setOpenEmp(null)} />}
     </div>

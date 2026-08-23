@@ -14,6 +14,8 @@
   --danger-light: #FAECE7;
   --warn: #A5680B;
   --warn-light: #FAEEDA;
+  --success: #0F6E56;
+  --success-light: #E1F5EE;
   --radius: 10px;
   --sidebar-w: 240px;
 }
@@ -110,6 +112,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .stat-value { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .stat-value.tone-danger { color: var(--danger); }
 .stat-value.tone-warn { color: var(--warn); }
+.stat-value.tone-success { color: var(--success); }
 .stat-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; }
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
@@ -132,6 +135,12 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .badge-danger {
   display: inline-block; margin-left: 8px; padding: 2px 8px;
   background: var(--danger-light); color: var(--danger);
+  border-radius: 999px; font-size: 11px; font-weight: 500; vertical-align: middle;
+}
+
+.badge-success {
+  display: inline-block; margin-left: 8px; padding: 2px 8px;
+  background: var(--success-light); color: var(--success);
   border-radius: 999px; font-size: 11px; font-weight: 500; vertical-align: middle;
 }
 
@@ -227,10 +236,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: linear-gradient(135deg, rgba(18,34,47,0.82) 0%, rgba(28,58,82,0.8) 55%, rgba(28,116,184,0.78) 100%), url("/assets/packages.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: linear-gradient(135deg, #12222F 0%, #1C3A52 55%, #1C74B8 100%);
   padding: 20px;
 }
 .login-card {
@@ -244,8 +250,8 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   flex-direction: column;
   align-items: center;
 }
-.login-logo { width: 100px; height: 100px; object-fit: contain; margin-bottom: 10px; }
-.login-title { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+.login-logo { width: 48px; height: 48px; object-fit: contain; margin-bottom: 10px; }
+.login-title { font-size: 17px; font-weight: 600; }
 .login-sub { font-size: 12.5px; color: var(--text-muted); margin-bottom: 22px; }
 .login-label {
   width: 100%;

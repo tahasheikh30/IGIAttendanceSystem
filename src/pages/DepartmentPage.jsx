@@ -79,7 +79,9 @@ export default function DepartmentPage() {
         <StatCard label="Avg early-leave rate" value={`${kpis.avgEarlyPct}%`} />
         <StatCard label="Avg overtime" value={`${kpis.avgOtHours}h`} />
         <StatCard label="Missing punches" value={kpis.totalMissing} tone="warn" />
+        <StatCard label="Short shifts" value={kpis.shortShiftTotal} sub="late + left early" tone={kpis.shortShiftTotal > 0 ? "warn" : undefined} />
         <StatCard label="Flagged" value={kpis.flagged} tone="danger" sub="not punctual" />
+        <StatCard label="Punctual" value={kpis.punctual} tone="success" />
       </div>
 
       <div className="card">
@@ -104,7 +106,7 @@ export default function DepartmentPage() {
         <table className="data-table">
           <thead>
             <tr>
-              <th>Name</th><th>Late %</th><th>Early %</th><th>OT hrs</th><th>Missing</th><th></th>
+              <th>Name</th><th>Late %</th><th>Early %</th><th>OT hrs</th><th>Missing</th><th>Short shifts</th><th></th>
             </tr>
           </thead>
           <tbody>
@@ -115,7 +117,11 @@ export default function DepartmentPage() {
                 <td>{e.earlyPct}%</td>
                 <td>{e.otHours}h</td>
                 <td className={e.missing > 3 ? "td-warn" : ""}>{e.missing}</td>
-                <td>{e.flagged && <span className="badge-danger">Not punctual</span>}</td>
+                <td className={e.shortShift > 0 ? "td-warn" : ""}>{e.shortShift}</td>
+                <td>
+                  {e.flagged && <span className="badge-danger">Not punctual</span>}
+                  {e.punctual && <span className="badge-success">Punctual</span>}
+                </td>
               </tr>
             ))}
           </tbody>

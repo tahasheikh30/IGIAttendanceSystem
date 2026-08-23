@@ -33,7 +33,6 @@ export default function EmployeeDrawer({ empNo, onClose }) {
     .map(d => ({ date: d.date.slice(5), late: d.late_min, ot: d.ot_min }));
 
   const s = data?.stats;
-  const chronic = s && (s.latePct >= 50 || s.missing >= 4);
 
   return (
     <div className="drawer-overlay" onClick={onClose}>
@@ -45,7 +44,8 @@ export default function EmployeeDrawer({ empNo, onClose }) {
               <div>
                 <div className="drawer-name">
                   {data.name}
-                  {chronic && <span className="badge-danger">Not punctual</span>}
+                  {s?.flagged && <span className="badge-danger">Not punctual</span>}
+                  {s?.punctual && <span className="badge-success">Punctual</span>}
                 </div>
                 <div className="drawer-sub">{data.dept} · {data.grade || "—"} · ID {data.empNo}</div>
               </div>
@@ -75,6 +75,8 @@ export default function EmployeeDrawer({ empNo, onClose }) {
                 <StatCard label="Early leave" value={`${s.earlyPct}%`} sub={`${s.early} days`} />
                 <StatCard label="Overtime" value={`${s.otHours}h`} />
                 <StatCard label="Missing punches" value={s.missing} tone={s.missing > 3 ? "warn" : undefined} />
+                <StatCard label="Short shifts" value={s.shortShift} sub="late + left early" tone={s.shortShift > 0 ? "warn" : undefined} />
+                <StatCard label="Late but stayed (OT)" value={s.lateWithOt} sub="compensated with overtime" />
               </div>
             )}
 
