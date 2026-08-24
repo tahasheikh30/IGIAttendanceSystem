@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getOverview } from "../api";
+import { getOverview, getCompanies } from "../api";
 import StatCard from "../components/StatCard";
 import DeptBarChart from "../components/DeptBarChart";
 import EmployeeDrawer from "../components/EmployeeDrawer";
@@ -10,10 +10,16 @@ export default function Overview() {
   const { days, setDays } = useRange();
   const [openEmp, setOpenEmp] = useState(null);
   const [search, setSearch] = useState("");
+  const [companies, setCompanies] = useState([]);
+  const [company, setCompany] = useState("");
 
   useEffect(() => {
-    getOverview(days).then(setData);
-  }, [days]);
+    getCompanies().then(setCompanies).catch(() => setCompanies([]));
+  }, []);
+
+  useEffect(() => {
+    getOverview(days, company || null).then(setData);
+  }, [days, company]);
 
   const filteredFlagged = useMemo(() => {
     if (!data) return [];
@@ -39,14 +45,26 @@ export default function Overview() {
       <div className="page-header">
         <div>
           <h1>Overview</h1>
-          <p className="page-sub">Company-wide attendance, last {days} days</p>
+          <p className="page-sub">
+            {company ? `${company} · ` : "Company-wide · "}attendance, last {days} days
+          </p>
         </div>
-        <div className="range-toggle">
-          {[30, 90, 180, 365].map(r => (
-            <button key={r} className={"chip" + (days === r ? " chip-active" : "")} onClick={() => setDays(r)}>
-              {r === 365 ? "1 year" : `${r}d`}
-            </button>
-          ))}
+        <div className="header-actions">
+          {companies.length > 0 && (
+            <select value={company} onChange={e => setCompany(e.target.value)} className="select">
+              <option value="">All companies</option>
+              {companies.map(c => (
+                <option key={c.company} value={c.company}>{c.company} ({c.employees})</option>
+              ))}
+            </select>
+          )}
+          <div className="range-toggle">
+            {[30, 90, 180, 365].map(r => (
+              <button key={r} className={"chip" + (days === r ? " chip-active" : "")} onClick={() => setDays(r)}>
+                {r === 365 ? "1 year" : `${r}d`}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

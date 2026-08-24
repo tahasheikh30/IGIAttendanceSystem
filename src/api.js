@@ -42,7 +42,11 @@ api.interceptors.response.use(
 export const login = (username, password) =>
   api.post("/auth/login", { username, password }).then(r => r.data);
 
-export const getOverview = (days = 30) => api.get(`/overview?days=${days}`).then(r => r.data);
+export const getOverview = (days = 30, company = null) => {
+  const q = company ? `?days=${days}&company=${encodeURIComponent(company)}` : `?days=${days}`;
+  return api.get(`/overview${q}`).then(r => r.data);
+};
+export const getCompanies = () => api.get("/companies").then(r => r.data);
 export const getDepartments = () => api.get("/departments").then(r => r.data);
 export const getDepartment = (dept, days = 30) =>
   api.get(`/departments/${encodeURIComponent(dept)}?days=${days}`).then(r => r.data);
