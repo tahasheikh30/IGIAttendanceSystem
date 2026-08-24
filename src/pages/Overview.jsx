@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getOverview } from "../api";
 import StatCard from "../components/StatCard";
 import DeptBarChart from "../components/DeptBarChart";
@@ -9,10 +9,19 @@ export default function Overview() {
   const [data, setData] = useState(null);
   const { days, setDays } = useRange();
   const [openEmp, setOpenEmp] = useState(null);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     getOverview(days).then(setData);
   }, [days]);
+
+  const filteredFlagged = useMemo(() => {
+    if (!data) return [];
+    const list = data.flaggedEmployees;
+    if (!search.trim()) return list;
+    const q = search.toLowerCase();
+    return list.filter(e => e.name.toLowerCase().includes(q) || e.dept.toLowerCase().includes(q));
+  }, [data, search]);
 
   if (!data) {
     return (
@@ -23,7 +32,7 @@ export default function Overview() {
     );
   }
 
-  const { kpis, departments, topFlagged, topPunctual } = data;
+  const { kpis, departments, topPunctual } = data;
 
   return (
     <div>
@@ -59,26 +68,46 @@ export default function Overview() {
       </div>
 
       <div className="card">
-        <div className="section-label">Employees needing attention</div>
-        <p className="hint">Ranked by anomaly score — deviation from department norms plus missing punches</p>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Name</th><th>Department</th><th>Late %</th><th>OT hrs</th><th>Missing</th>
-            </tr>
-          </thead>
-          <tbody>
-            {topFlagged.map(e => (
-              <tr key={e.empNo} onClick={() => setOpenEmp(e.empNo)}>
-                <td className="td-name">{e.name}</td>
-                <td className="td-muted">{e.dept}</td>
-                <td className={e.latePct > 50 ? "td-danger" : ""}>{e.latePct}%</td>
-                <td>{e.otHours}h</td>
-                <td className={e.missing > 3 ? "td-warn" : ""}>{e.missing}</td>
+        <div className="table-toolbar">
+          <div>
+            <div className="section-label" style={{ marginBottom: 0 }}>
+              Employees needing attention ({data.flaggedEmployees.length})
+            </div>
+            <p className="hint" style={{ marginBottom: 0 }}>
+              Every flagged employee company-wide, ranked by anomaly score — deviation from department norms, missing punches, and short shifts
+            </p>
+          </div>
+          <input
+            placeholder="Search name or department"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="input"
+          />
+        </div>
+        <div className="table-scroll">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Name</th><th>Department</th><th>Late %</th><th>OT hrs</th><th>Missing</th><th>Short shifts</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredFlagged.map(e => (
+                <tr key={e.empNo} onClick={() => setOpenEmp(e.empNo)}>
+                  <td className="td-name">{e.name}</td>
+                  <td className="td-muted">{e.dept}</td>
+                  <td className={e.latePct > 50 ? "td-danger" : ""}>{e.latePct}%</td>
+                  <td>{e.otHours}h</td>
+                  <td className={e.missing > 3 ? "td-warn" : ""}>{e.missing}</td>
+                  <td className={e.shortShift > 0 ? "td-warn" : ""}>{e.shortShift}</td>
+                </tr>
+              ))}
+              {filteredFlagged.length === 0 && (
+                <tr><td colSpan={6} className="td-muted">No matches</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {topPunctual && topPunctual.length > 0 && (

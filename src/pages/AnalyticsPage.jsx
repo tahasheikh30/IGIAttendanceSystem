@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  LineChart, Line, BarChart, Bar, RadarChart, Radar, PolarGrid,
-  PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer, Cell,
 } from "recharts";
 import { toPng } from "html-to-image";
 import { getAnalytics } from "../api";
 import DailyHeatmap from "../components/DailyHeatmap";
 import { useRange } from "../context/RangeContext";
+
+const METRIC_COLORS = { "Late %": "#D85A30", "Early leave %": "#D4537E", "Overtime %": "#1C74B8", "Anomaly %": "#A5680B" };
 
 export default function AnalyticsPage() {
   const [data, setData] = useState(null);
@@ -44,10 +45,8 @@ export default function AnalyticsPage() {
 
   if (!data) return <div className="empty-state">Loading…</div>;
 
-  const {
-    weeklyTrend, dayOfWeek, lateDistribution, dailyHeatmap,
-    deptRadar, mostPunctual, needsAttention,
-  } = data;
+  const { weeklyTrend, dayOfWeek, lateDistribution, dailyHeatmap, deptComparison } = data;
+  const maxDowScheduled = Math.max(...dayOfWeek.map(d => d.scheduled), 1);
 
   return (
     <div>
@@ -72,16 +71,16 @@ export default function AnalyticsPage() {
 
       <div ref={chartsRef}>
         <div className="card">
-          <div className="section-label">Weekly trend</div>
-          <p className="hint">Late rate, early-leave rate, and total overtime hours, week over week</p>
-          <ResponsiveContainer width="100%" height={260}>
-            <LineChart data={weeklyTrend}>
+          <div className="section-label">Is attendance improving or worsening?</div>
+          <p className="hint">Weekly late rate, early-leave rate, and total overtime hours — use this to tell whether a fix you made actually worked</p>
+          <ResponsiveContainer width="100%" height={270}>
+            <LineChart data={weeklyTrend} margin={{ top: 4, right: 8, bottom: 20, left: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-              <XAxis dataKey="week" tick={{ fontSize: 11 }} />
-              <YAxis yAxisId="pct" tick={{ fontSize: 11 }} unit="%" />
-              <YAxis yAxisId="ot" orientation="right" tick={{ fontSize: 11 }} unit="h" />
+              <XAxis dataKey="week" tick={{ fontSize: 11 }} label={{ value: "Week starting", position: "insideBottom", offset: -12, fontSize: 11, fill: "var(--text-muted)" }} />
+              <YAxis yAxisId="pct" tick={{ fontSize: 11 }} unit="%" label={{ value: "Late / early %", angle: -90, position: "insideLeft", fontSize: 11, fill: "var(--text-muted)" }} />
+              <YAxis yAxisId="ot" orientation="right" tick={{ fontSize: 11 }} unit="h" label={{ value: "Overtime hours", angle: 90, position: "insideRight", fontSize: 11, fill: "var(--text-muted)" }} />
               <Tooltip />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
+              <Legend wrapperStyle={{ fontSize: 12 }} verticalAlign="top" height={28} />
               <Line yAxisId="pct" type="monotone" dataKey="latePct" name="Late %" stroke="#D85A30" strokeWidth={2} dot={{ r: 3 }} />
               <Line yAxisId="pct" type="monotone" dataKey="earlyPct" name="Early leave %" stroke="#D4537E" strokeWidth={2} dot={{ r: 3 }} />
               <Line yAxisId="ot" type="monotone" dataKey="otHours" name="Total OT (h)" stroke="#1C74B8" strokeWidth={2} dot={{ r: 3 }} strokeDasharray="4 3" />
@@ -91,32 +90,46 @@ export default function AnalyticsPage() {
 
         <div className="grid-2">
           <div className="card">
-            <div className="section-label">Late rate by day of week</div>
-            <p className="hint">Spot whether Mondays or Fridays are the problem</p>
-            <ResponsiveContainer width="100%" height={230}>
-              <BarChart data={dayOfWeek}>
+            <div className="section-label">Which day of the week is the problem?</div>
+            <p className="hint">Late rate by weekday — spot a Monday or Friday pattern worth addressing directly</p>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={dayOfWeek} margin={{ top: 4, right: 8, bottom: 20, left: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                <XAxis dataKey="shortDay" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 11 }} unit="%" />
-                <Tooltip labelFormatter={(_, p) => p?.[0]?.payload?.day} formatter={(v) => [`${v}%`, "Late"]} />
+                <XAxis dataKey="shortDay" tick={{ fontSize: 12 }} label={{ value: "Day of week", position: "insideBottom", offset: -12, fontSize: 11, fill: "var(--text-muted)" }} />
+                <YAxis tick={{ fontSize: 11 }} unit="%" label={{ value: "Late rate", angle: -90, position: "insideLeft", fontSize: 11, fill: "var(--text-muted)" }} />
+                <Tooltip
+                  labelFormatter={(_, p) => p?.[0]?.payload?.day}
+                  formatter={(v, _key, entry) => [`${v}% late — ${entry.payload.scheduled} scheduled that day`, ""]}
+                />
                 <Bar dataKey="latePct" radius={[4, 4, 0, 0]}>
-                  {dayOfWeek.map((d, i) => (
-                    <Cell key={i} fill={d.latePct >= 50 ? "#D85A30" : "#1C74B8"} />
-                  ))}
+                  {dayOfWeek.map((d, i) => {
+                    const tinySample = d.scheduled < maxDowScheduled * 0.2;
+                    return (
+                      <Cell
+                        key={i}
+                        fill={d.latePct >= 50 ? "#D85A30" : "#1C74B8"}
+                        fillOpacity={tinySample ? 0.35 : 1}
+                      />
+                    );
+                  })}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
+            <p className="hint" style={{ marginTop: 6 }}>
+              Faded bars run on a small sample (hover to see the count) — most weekends here reflect one dedicated
+              on-call team, not the whole company, so they're not directly comparable to weekdays.
+            </p>
           </div>
 
           <div className="card">
-            <div className="section-label">How late, when late</div>
-            <p className="hint">Distribution of minutes late, across all late arrivals</p>
-            <ResponsiveContainer width="100%" height={230}>
-              <BarChart data={lateDistribution}>
+            <div className="section-label">When people are late, how late are they?</div>
+            <p className="hint">Distribution of minutes late across every late arrival — a few habitual 2h+ latecomers need a different conversation than a company-wide 10-minute drift</p>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={lateDistribution} margin={{ top: 4, right: 8, bottom: 20, left: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                <XAxis dataKey="bucket" tick={{ fontSize: 11 }} />
-                <YAxis tick={{ fontSize: 11 }} />
-                <Tooltip />
+                <XAxis dataKey="bucket" tick={{ fontSize: 11 }} label={{ value: "Minutes late", position: "insideBottom", offset: -12, fontSize: 11, fill: "var(--text-muted)" }} />
+                <YAxis tick={{ fontSize: 11 }} label={{ value: "Late arrivals", angle: -90, position: "insideLeft", fontSize: 11, fill: "var(--text-muted)" }} />
+                <Tooltip formatter={(v) => [v, "Late arrivals"]} />
                 <Bar dataKey="count" fill="#EF9F27" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -124,64 +137,30 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="card">
-          <div className="section-label">Department comparison</div>
-          <p className="hint">Top 6 departments by headcount, across four attendance metrics</p>
-          <ResponsiveContainer width="100%" height={340}>
-            <RadarChart data={deptRadar} outerRadius="75%">
-              <PolarGrid stroke="var(--border)" />
-              <PolarAngleAxis dataKey="dept" tick={{ fontSize: 11 }} />
-              <PolarRadiusAxis tick={{ fontSize: 9 }} angle={30} />
-              {["Late %", "Early leave %", "Overtime %", "Anomaly %"].map((key, i) => (
-                <Radar
-                  key={key}
-                  name={key}
-                  dataKey={key}
-                  stroke={["#D85A30", "#D4537E", "#1C74B8", "#A5680B"][i]}
-                  fill={["#D85A30", "#D4537E", "#1C74B8", "#A5680B"][i]}
-                  fillOpacity={0.08}
-                />
-              ))}
-              <Legend wrapperStyle={{ fontSize: 12 }} />
+          <div className="section-label">Which department leads on which problem?</div>
+          <p className="hint">Top 6 departments by headcount, across four attendance metrics side by side — read each department's own bars, not the metrics against each other (a 20% late rate and a 20% overtime rate aren't the same kind of problem)</p>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={deptComparison} margin={{ top: 4, right: 8, bottom: 40, left: 8 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+              <XAxis dataKey="dept" tick={{ fontSize: 10 }} interval={0} angle={-25} textAnchor="end" height={60} />
+              <YAxis tick={{ fontSize: 11 }} unit="%" label={{ value: "Rate", angle: -90, position: "insideLeft", fontSize: 11, fill: "var(--text-muted)" }} />
               <Tooltip />
-            </RadarChart>
+              <Legend wrapperStyle={{ fontSize: 12 }} verticalAlign="top" height={28} />
+              {Object.keys(METRIC_COLORS).map(key => (
+                <Bar key={key} dataKey={key} name={key} fill={METRIC_COLORS[key]} radius={[3, 3, 0, 0]} />
+              ))}
+            </BarChart>
           </ResponsiveContainer>
-          <p className="hint" style={{ marginTop: 4 }}>Note: this chart plots one metric per department, not per company — read it as "which department leads on which metric," not raw counts.</p>
         </div>
 
         <div className="card">
-          <div className="section-label">Company-wide daily heatmap</div>
-          <p className="hint">Each square is one day — darker red means a higher share of staff were late that day</p>
+          <div className="section-label">Are there specific days that stand out?</div>
+          <p className="hint">Every day in the selected window — darker red means a higher share of scheduled staff were late that day. Hover any square for the date and exact rate.</p>
           <DailyHeatmap days={dailyHeatmap} />
           <div className="legend">
             <span className="legend-item"><span className="legend-swatch" style={{ background: "#C4E0F5" }} />Low late rate</span>
             <span className="legend-item"><span className="legend-swatch" style={{ background: "#C0432A" }} />High late rate</span>
-          </div>
-        </div>
-
-        <div className="grid-2">
-          <div className="card">
-            <div className="section-label">Most punctual</div>
-            <p className="hint">Lowest late rate, minimum 10 scheduled days</p>
-            <table className="data-table">
-              <thead><tr><th>Name</th><th>Dept</th><th>Late %</th></tr></thead>
-              <tbody>
-                {mostPunctual.map(e => (
-                  <tr key={e.empNo}><td className="td-name">{e.name}</td><td className="td-muted">{e.dept}</td><td>{e.latePct}%</td></tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="card">
-            <div className="section-label">Needs attention</div>
-            <p className="hint">Highest late rate, minimum 10 scheduled days</p>
-            <table className="data-table">
-              <thead><tr><th>Name</th><th>Dept</th><th>Late %</th></tr></thead>
-              <tbody>
-                {needsAttention.map(e => (
-                  <tr key={e.empNo}><td className="td-name">{e.name}</td><td className="td-muted">{e.dept}</td><td className="td-danger">{e.latePct}%</td></tr>
-                ))}
-              </tbody>
-            </table>
+            <span className="legend-item"><span className="legend-swatch" style={{ background: "#EEF1F5" }} />No one scheduled</span>
           </div>
         </div>
       </div>
