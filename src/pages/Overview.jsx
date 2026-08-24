@@ -7,11 +7,10 @@ import { useRange } from "../context/RangeContext";
 
 export default function Overview() {
   const [data, setData] = useState(null);
-  const { days, setDays } = useRange();
+  const { days, setDays, company, setCompany } = useRange();
   const [openEmp, setOpenEmp] = useState(null);
   const [search, setSearch] = useState("");
   const [companies, setCompanies] = useState([]);
-  const [company, setCompany] = useState("");
 
   useEffect(() => {
     getCompanies().then(setCompanies).catch(() => setCompanies([]));

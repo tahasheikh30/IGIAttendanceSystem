@@ -4,8 +4,12 @@ const RangeContext = createContext(null);
 
 export function RangeProvider({ children }) {
   const [days, setDays] = useState(30);
+  // Shared with Sidebar too, so the department list in the nav filters
+  // down to whichever company is selected on Overview instead of always
+  // showing every department company-wide.
+  const [company, setCompany] = useState("");
   return (
-    <RangeContext.Provider value={{ days, setDays }}>
+    <RangeContext.Provider value={{ days, setDays, company, setCompany }}>
       {children}
     </RangeContext.Provider>
   );

@@ -47,7 +47,10 @@ export const getOverview = (days = 30, company = null) => {
   return api.get(`/overview${q}`).then(r => r.data);
 };
 export const getCompanies = () => api.get("/companies").then(r => r.data);
-export const getDepartments = () => api.get("/departments").then(r => r.data);
+export const getDepartments = (company = null) => {
+  const q = company ? `?company=${encodeURIComponent(company)}` : "";
+  return api.get(`/departments${q}`).then(r => r.data);
+};
 export const getDepartment = (dept, days = 30) =>
   api.get(`/departments/${encodeURIComponent(dept)}?days=${days}`).then(r => r.data);
 export const getEmployee = (empNo, days = 365) =>

@@ -2,14 +2,16 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getDepartments } from "../api";
 import { useAuth } from "../context/AuthContext";
+import { useRange } from "../context/RangeContext";
 
 export default function Sidebar() {
   const [depts, setDepts] = useState([]);
   const { logout } = useAuth();
+  const { company } = useRange();
 
   useEffect(() => {
-    getDepartments().then(setDepts).catch(() => setDepts([]));
-  }, []);
+    getDepartments(company || null).then(setDepts).catch(() => setDepts([]));
+  }, [company]);
 
   return (
     <aside className="sidebar">
@@ -36,9 +38,13 @@ export default function Sidebar() {
         </NavLink>
       </nav>
 
-      <div className="nav-label">Departments</div>
+      <div className="nav-label">{company ? `Departments · ${company}` : "Departments"}</div>
       <nav className="nav-section scroll">
-        {depts.length === 0 && <div className="nav-empty">No data yet — upload a file</div>}
+        {depts.length === 0 && (
+          <div className="nav-empty">
+            {company ? `No departments for ${company}` : "No data yet — upload a file"}
+          </div>
+        )}
         {depts.map(d => (
           <NavLink
             key={d.dept}
