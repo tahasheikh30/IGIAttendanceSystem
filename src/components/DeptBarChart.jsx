@@ -1,8 +1,10 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { useNavigate } from "react-router-dom";
+import { useRange } from "../context/RangeContext";
 
 export default function DeptBarChart({ departments }) {
   const navigate = useNavigate();
+  const { company } = useRange();
   const data = departments.map(d => ({
     ...d,
     label: d.dept.length > 20 ? d.dept.slice(0, 19) + "…" : d.dept,
@@ -22,7 +24,9 @@ export default function DeptBarChart({ departments }) {
           dataKey="latePct"
           radius={[0, 4, 4, 0]}
           cursor="pointer"
-          onClick={(d) => navigate(`/department/${encodeURIComponent(d.dept)}`)}
+          onClick={(d) => navigate(
+            `/department/${encodeURIComponent(d.dept)}${company ? `?company=${encodeURIComponent(company)}` : ""}`
+          )}
         >
           {data.map((d, i) => (
             <Cell key={i} fill={d.latePct >= 60 ? "#D85A30" : d.latePct >= 35 ? "#EF9F27" : "#1D9E75"} />

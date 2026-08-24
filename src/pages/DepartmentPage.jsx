@@ -8,7 +8,7 @@ import { useRange } from "../context/RangeContext";
 export default function DepartmentPage() {
   const { dept } = useParams();
   const [data, setData] = useState(null);
-  const { days, setDays } = useRange();
+  const { days, setDays, company } = useRange();
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("anomalyScore");
   const [openEmp, setOpenEmp] = useState(null);
@@ -18,7 +18,7 @@ export default function DepartmentPage() {
   const handleDownload = async () => {
     setDownloading(true);
     try {
-      await downloadDepartmentReport(dept, days);
+      await downloadDepartmentReport(dept, days, company || null);
     } catch {
       window.alert("Couldn't generate the report — try again.");
     } finally {
@@ -28,8 +28,8 @@ export default function DepartmentPage() {
 
   useEffect(() => {
     setError(null);
-    getDepartment(dept, days).then(setData).catch(() => setError(true));
-  }, [dept, days]);
+    getDepartment(dept, days, company || null).then(setData).catch(() => setError(true));
+  }, [dept, days, company]);
 
   const employees = useMemo(() => {
     if (!data) return [];
@@ -44,7 +44,7 @@ export default function DepartmentPage() {
   if (error) {
     return (
       <div className="empty-state">
-        <div className="empty-title">No data for {dept} in this window</div>
+        <div className="empty-title">No data for {dept}{company ? ` in ${company}` : ""} in this window</div>
         <p>Try a wider date range, or upload more history.</p>
       </div>
     );
@@ -58,7 +58,7 @@ export default function DepartmentPage() {
       <div className="page-header">
         <div>
           <h1>{dept}</h1>
-          <p className="page-sub">{kpis.employees} employees · last {days} days</p>
+          <p className="page-sub">{company ? `${company} · ` : ""}{kpis.employees} employees · last {days} days</p>
         </div>
         <div className="header-actions">
           <div className="range-toggle">

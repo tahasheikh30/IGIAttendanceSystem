@@ -51,8 +51,10 @@ export const getDepartments = (company = null) => {
   const q = company ? `?company=${encodeURIComponent(company)}` : "";
   return api.get(`/departments${q}`).then(r => r.data);
 };
-export const getDepartment = (dept, days = 30) =>
-  api.get(`/departments/${encodeURIComponent(dept)}?days=${days}`).then(r => r.data);
+export const getDepartment = (dept, days = 30, company = null) => {
+  const q = company ? `?days=${days}&company=${encodeURIComponent(company)}` : `?days=${days}`;
+  return api.get(`/departments/${encodeURIComponent(dept)}${q}`).then(r => r.data);
+};
 export const getEmployee = (empNo, days = 365) =>
   api.get(`/employees/${encodeURIComponent(empNo)}?days=${days}`).then(r => r.data);
 export const getAnalytics = (days = 90) => api.get(`/analytics?days=${days}`).then(r => r.data);
@@ -74,11 +76,14 @@ async function downloadBlob(path, filename) {
   URL.revokeObjectURL(url);
 }
 
-export const downloadDepartmentReport = (dept, days) =>
-  downloadBlob(
-    `/departments/${encodeURIComponent(dept)}/report?days=${days}`,
-    `${dept.replace(/[^a-zA-Z0-9]+/g, "_")}_attendance_report.pdf`
+export const downloadDepartmentReport = (dept, days, company = null) => {
+  const q = company ? `?days=${days}&company=${encodeURIComponent(company)}` : `?days=${days}`;
+  const namePrefix = company ? `${company}_${dept}` : dept;
+  return downloadBlob(
+    `/departments/${encodeURIComponent(dept)}/report${q}`,
+    `${namePrefix.replace(/[^a-zA-Z0-9]+/g, "_")}_attendance_report.pdf`
   );
+};
 
 export const downloadEmployeeReport = (empNo, name, days) =>
   downloadBlob(

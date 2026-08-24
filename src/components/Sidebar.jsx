@@ -48,7 +48,7 @@ export default function Sidebar() {
         {depts.map(d => (
           <NavLink
             key={d.dept}
-            to={`/department/${encodeURIComponent(d.dept)}`}
+            to={`/department/${encodeURIComponent(d.dept)}${company ? `?company=${encodeURIComponent(company)}` : ""}`}
             className={({ isActive }) => "nav-link dept" + (isActive ? " active" : "")}
           >
             <span>{d.dept}</span>
