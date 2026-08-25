@@ -6,7 +6,7 @@ import CalendarStrip, { CodeLegend } from "./CalendarStrip";
 
 export default function EmployeeDrawer({ empNo, onClose }) {
   const [data, setData] = useState(null);
-  const [range, setRange] = useState(90);
+  const [range, setRange] = useState(30);
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
 
