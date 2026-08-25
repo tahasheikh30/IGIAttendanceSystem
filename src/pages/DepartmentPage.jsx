@@ -75,13 +75,13 @@ export default function DepartmentPage() {
       </div>
 
       <div className="stat-row">
-        <StatCard label="Avg late rate" value={`${kpis.avgLatePct}%`} tone={kpis.avgLatePct > 40 ? "warn" : undefined} />
-        <StatCard label="Avg early-leave rate" value={`${kpis.avgEarlyPct}%`} />
-        <StatCard label="Avg overtime" value={`${kpis.avgOtHours}h`} />
-        <StatCard label="Missing punches" value={kpis.totalMissing} tone="warn" />
-        <StatCard label="Short shifts" value={kpis.shortShiftTotal} sub="late + left early" tone={kpis.shortShiftTotal > 0 ? "warn" : undefined} />
-        <StatCard label="Flagged" value={kpis.flagged} tone="danger" sub="not punctual" />
-        <StatCard label="Punctual" value={kpis.punctual} tone="success" />
+        <StatCard label="Avg late rate" value={`${kpis.avgLatePct}%`} unit="% of days" tone={kpis.avgLatePct > 40 ? "warn" : undefined} />
+        <StatCard label="Avg early-leave rate" value={`${kpis.avgEarlyPct}%`} unit="% of days" />
+        <StatCard label="Avg overtime" value={`${kpis.avgOtHours}h`} unit="hours" />
+        <StatCard label="Missing punches" value={kpis.totalMissing} unit="days" tone="warn" />
+        <StatCard label="Short shifts" value={kpis.shortShiftTotal} unit="days" sub="late + left early" tone={kpis.shortShiftTotal > 0 ? "warn" : undefined} />
+        <StatCard label="Flagged" value={kpis.flagged} unit="employees" tone="danger" sub="not punctual" />
+        <StatCard label="Punctual" value={kpis.punctual} unit="employees" tone="success" />
       </div>
 
       <div className="card">
