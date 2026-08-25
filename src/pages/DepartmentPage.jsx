@@ -117,7 +117,7 @@ export default function DepartmentPage() {
                 <td>{e.earlyPct}%</td>
                 <td>{e.otHours}h</td>
                 <td className={e.missing > 3 ? "td-warn" : ""}>{e.missing}</td>
-                <td
+                <td>
                   {e.flagged && <span className="badge-danger">Not punctual</span>}
                   {e.punctual && <span className="badge-success">Punctual</span>}
                 </td>
