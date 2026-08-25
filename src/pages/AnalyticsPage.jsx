@@ -8,7 +8,7 @@ import { getAnalytics } from "../api";
 import DailyHeatmap from "../components/DailyHeatmap";
 import { useRange } from "../context/RangeContext";
 
-const METRIC_COLORS = { "Late %": "#D85A30", "Early leave %": "#D4537E", "Overtime %": "#1C74B8", "Anomaly %": "#A5680B" };
+const METRIC_COLORS = { "Late %": "#D85A30", "Early leave %": "#D4537E", "Late hours %": "#1C74B8", "Anomaly %": "#A5680B" };
 
 export default function AnalyticsPage() {
   const [data, setData] = useState(null);
@@ -72,18 +72,18 @@ export default function AnalyticsPage() {
       <div ref={chartsRef}>
         <div className="card">
           <div className="section-label">Is attendance improving or worsening?</div>
-          <p className="hint">Weekly late rate, early-leave rate, and total overtime hours — use this to tell whether a fix you made actually worked</p>
+          <p className="hint">Weekly late rate, early-leave rate, and total late hours — use this to tell whether a fix you made actually worked</p>
           <ResponsiveContainer width="100%" height={270}>
             <LineChart data={weeklyTrend} margin={{ top: 4, right: 8, bottom: 20, left: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
               <XAxis dataKey="week" tick={{ fontSize: 11 }} label={{ value: "Week starting", position: "insideBottom", offset: -12, fontSize: 11, fill: "var(--text-muted)" }} />
               <YAxis yAxisId="pct" tick={{ fontSize: 11 }} unit="%" label={{ value: "Late / early %", angle: -90, position: "insideLeft", fontSize: 11, fill: "var(--text-muted)" }} />
-              <YAxis yAxisId="ot" orientation="right" tick={{ fontSize: 11 }} unit="h" label={{ value: "Overtime hours", angle: 90, position: "insideRight", fontSize: 11, fill: "var(--text-muted)" }} />
+              <YAxis yAxisId="ot" orientation="right" tick={{ fontSize: 11 }} unit="h" label={{ value: "Late hours", angle: 90, position: "insideRight", fontSize: 11, fill: "var(--text-muted)" }} />
               <Tooltip />
               <Legend wrapperStyle={{ fontSize: 12 }} verticalAlign="top" height={28} />
               <Line yAxisId="pct" type="monotone" dataKey="latePct" name="Late %" stroke="#D85A30" strokeWidth={2} dot={{ r: 3 }} />
               <Line yAxisId="pct" type="monotone" dataKey="earlyPct" name="Early leave %" stroke="#D4537E" strokeWidth={2} dot={{ r: 3 }} />
-              <Line yAxisId="ot" type="monotone" dataKey="otHours" name="Total OT (h)" stroke="#1C74B8" strokeWidth={2} dot={{ r: 3 }} strokeDasharray="4 3" />
+              <Line yAxisId="ot" type="monotone" dataKey="otHours" name="Total late (h)" stroke="#1C74B8" strokeWidth={2} dot={{ r: 3 }} strokeDasharray="4 3" />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -138,7 +138,7 @@ export default function AnalyticsPage() {
 
         <div className="card">
           <div className="section-label">Which department leads on which problem?</div>
-          <p className="hint">Top 6 departments by headcount, across four attendance metrics side by side — read each department's own bars, not the metrics against each other (a 20% late rate and a 20% overtime rate aren't the same kind of problem)</p>
+          <p className="hint">Top 6 departments by headcount, across four attendance metrics side by side — read each department's own bars, not the metrics against each other (a 20% late rate and a 20% late-hours rate aren't the same kind of problem)</p>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={deptComparison} margin={{ top: 4, right: 8, bottom: 40, left: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />

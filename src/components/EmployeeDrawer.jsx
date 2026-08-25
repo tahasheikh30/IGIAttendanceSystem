@@ -77,10 +77,10 @@ export default function EmployeeDrawer({ empNo, onClose }) {
               <div className="stat-row">
                 <StatCard label="Late" value={`${s.latePct}%`} unit="% of days" sub={`${s.late} of ${s.scheduled} days · avg ${s.avgLateMin}m`} tone={s.latePct > 50 ? "danger" : undefined} />
                 <StatCard label="Early leave" value={`${s.earlyPct}%`} unit="% of days" sub={`${s.early} days`} />
-                <StatCard label="Overtime" value={`${s.otHours}h`} unit="hours" />
+                <StatCard label="Late hours" value={`${s.otHours}h`} unit="hours" />
                 <StatCard label="Missing punches" value={s.missing} unit="days" tone={s.missing > 3 ? "warn" : undefined} />
                 <StatCard label="Short shifts" value={s.shortShift} unit="days" sub="late + left early" tone={s.shortShift > 0 ? "warn" : undefined} />
-                <StatCard label="Late but stayed (OT)" value={s.lateWithOt} unit="days" sub="compensated with overtime" />
+                <StatCard label="Late but stayed (late hours)" value={s.lateWithOt} unit="days" sub="compensated with late hours" />
                 {avgWeeklyHours != null && (
                   <StatCard label="Avg time in office" value={`${avgWeeklyHours}h`} unit="hours / week" sub={`across ${weeklyHours.length} week${weeklyHours.length === 1 ? "" : "s"}`} />
                 )}
@@ -120,7 +120,7 @@ export default function EmployeeDrawer({ empNo, onClose }) {
               </>
             )}
 
-            <div className="section-label">Late / overtime minutes by day</div>
+            <div className="section-label">Late / late-hours minutes by day</div>
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={trend}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
@@ -130,7 +130,7 @@ export default function EmployeeDrawer({ empNo, onClose }) {
                 <Legend wrapperStyle={{ fontSize: 12 }} />
                 <ReferenceLine y={0} stroke="var(--border)" />
                 <Line type="monotone" dataKey="late" name="Late (min)" stroke="#D85A30" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="ot" name="Overtime (min)" stroke="#0F6E56" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="ot" name="Late hours (min)" stroke="#0F6E56" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </>

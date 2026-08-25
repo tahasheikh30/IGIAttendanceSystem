@@ -77,7 +77,7 @@ export default function DepartmentPage() {
       <div className="stat-row">
         <StatCard label="Avg late rate" value={`${kpis.avgLatePct}%`} unit="% of days" tone={kpis.avgLatePct > 40 ? "warn" : undefined} />
         <StatCard label="Avg early-leave rate" value={`${kpis.avgEarlyPct}%`} unit="% of days" />
-        <StatCard label="Avg overtime" value={`${kpis.avgOtHours}h`} unit="hours" />
+        <StatCard label="Avg late hours" value={`${kpis.avgOtHours}h`} unit="hours" />
         <StatCard label="Missing punches" value={kpis.totalMissing} unit="days" tone="warn" />
         <StatCard label="Short shifts" value={kpis.shortShiftTotal} unit="days" sub="late + left early" tone={kpis.shortShiftTotal > 0 ? "warn" : undefined} />
         <StatCard label="Flagged" value={kpis.flagged} unit="employees" tone="danger" sub="not punctual" />
@@ -97,7 +97,7 @@ export default function DepartmentPage() {
             <select value={sortKey} onChange={e => setSortKey(e.target.value)} className="select">
               <option value="anomalyScore">Sort: anomaly score</option>
               <option value="latePct">Sort: late %</option>
-              <option value="otHours">Sort: overtime</option>
+              <option value="otHours">Sort: late hours</option>
               <option value="missing">Sort: missing punches</option>
             </select>
           </div>
@@ -106,7 +106,7 @@ export default function DepartmentPage() {
         <table className="data-table">
           <thead>
             <tr>
-              <th>Name</th><th>Late %</th><th>Early %</th><th>OT hrs</th><th>Missing</th><th>Short shifts</th><th></th>
+              <th>Name</th><th>Late %</th><th>Early %</th><th>Late hrs</th><th>Missing</th><th>Short shifts</th><th></th>
             </tr>
           </thead>
           <tbody>

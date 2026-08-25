@@ -50,12 +50,17 @@ export default function Overview() {
         </div>
         <div className="header-actions">
           {companies.length > 0 && (
-            <select value={company} onChange={e => setCompany(e.target.value)} className="select">
-              <option value="">All companies</option>
-              {companies.map(c => (
-                <option key={c.company} value={c.company}>{c.company} ({c.employees})</option>
-              ))}
-            </select>
+            <div className="company-select-wrap">
+              <select value={company} onChange={e => setCompany(e.target.value)} className="company-select">
+                <option value="">All companies</option>
+                {companies.map(c => (
+                  <option key={c.company} value={c.company}>{c.company} ({c.employees})</option>
+                ))}
+              </select>
+              <svg className="company-select-icon" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
           )}
           <div className="range-toggle">
             {[30, 90, 180, 365].map(r => (
@@ -68,14 +73,14 @@ export default function Overview() {
       </div>
 
       <div className="stat-row">
-        <StatCard label="Employees" value={kpis.totalEmployees} />
-        <StatCard label="Avg late rate" value={`${kpis.avgLatePct}%`} tone={kpis.avgLatePct > 40 ? "warn" : undefined} />
-        <StatCard label="Chronic latecomers" value={kpis.chronicLate} sub="late 60%+ of days" tone="danger" />
-        <StatCard label="Avg overtime" value={`${kpis.avgOtHours}h`} sub="per employee" />
-        <StatCard label="Missing punches" value={kpis.totalMissing} tone="warn" />
-        <StatCard label="Short shifts" value={kpis.shortShiftTotal} sub="came late, left early" tone={kpis.shortShiftTotal > 0 ? "warn" : undefined} />
-        <StatCard label="Flagged employees" value={kpis.flagged} tone="danger" />
-        <StatCard label="Punctual employees" value={kpis.punctual} tone="success" />
+        <StatCard label="Employees" value={kpis.totalEmployees} unit="headcount" />
+        <StatCard label="Avg late rate" value={`${kpis.avgLatePct}%`} unit="% of days" tone={kpis.avgLatePct > 40 ? "warn" : undefined} />
+        <StatCard label="Chronic latecomers" value={kpis.chronicLate} unit="employees" sub="late 60%+ of days" tone="danger" />
+        <StatCard label="Avg late hours" value={`${kpis.avgOtHours}h`} unit="hours" sub="per employee" />
+        <StatCard label="Missing punches" value={kpis.totalMissing} unit="days" tone="warn" />
+        <StatCard label="Short shifts" value={kpis.shortShiftTotal} unit="days" sub="came late, left early" tone={kpis.shortShiftTotal > 0 ? "warn" : undefined} />
+        <StatCard label="Flagged employees" value={kpis.flagged} unit="employees" tone="danger" />
+        <StatCard label="Punctual employees" value={kpis.punctual} unit="employees" tone="success" />
       </div>
 
       <div className="card">
@@ -105,7 +110,7 @@ export default function Overview() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Name</th><th>Department</th><th>Late %</th><th>OT hrs</th><th>Missing</th><th>Short shifts</th>
+                <th>Name</th><th>Department</th><th>Late %</th><th>Late hrs</th><th>Missing</th><th>Short shifts</th>
               </tr>
             </thead>
             <tbody>

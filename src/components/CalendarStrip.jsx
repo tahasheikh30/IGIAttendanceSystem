@@ -28,7 +28,7 @@ export default function CalendarStrip({ days }) {
         <div
           key={i}
           className="cal-cell"
-          title={`${d.date} · ${CODE_META[d.code]?.label || d.code}${d.late_min ? ` · +${d.late_min}m late` : ""}${d.ot_min ? ` · +${d.ot_min}m OT` : ""}`}
+          title={`${d.date} · ${CODE_META[d.code]?.label || d.code}${d.late_min ? ` · +${d.late_min}m late` : ""}${d.ot_min ? ` · +${d.ot_min}m late hours` : ""}`}
           style={{
             background: CODE_META[d.code]?.color || "#ccc",
             opacity: d.code === "R" || d.code === "H" ? 0.35 : 1,
