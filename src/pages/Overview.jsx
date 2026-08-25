@@ -110,7 +110,7 @@ export default function Overview() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Name</th><th>Department</th><th>Late %</th><th>Late hrs</th><th>Missing</th><th>Short shifts</th>
+                <th>Name</th><th>Department</th><th>Late %</th><th>Early %</th><th>Late hrs</th><th>Missing</th>
               </tr>
             </thead>
             <tbody>
@@ -119,9 +119,9 @@ export default function Overview() {
                   <td className="td-name">{e.name}</td>
                   <td className="td-muted">{e.dept}</td>
                   <td className={e.latePct > 50 ? "td-danger" : ""}>{e.latePct}%</td>
+                  <td>{e.earlyPct}%</td>
                   <td>{e.otHours}h</td>
                   <td className={e.missing > 3 ? "td-warn" : ""}>{e.missing}</td>
-                  <td className={e.shortShift > 0 ? "td-warn" : ""}>{e.shortShift}</td>
                 </tr>
               ))}
               {filteredFlagged.length === 0 && (

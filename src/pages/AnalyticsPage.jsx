@@ -12,11 +12,11 @@ const METRIC_COLORS = { "Late %": "#D85A30", "Early leave %": "#D4537E", "Late h
 
 export default function AnalyticsPage() {
   const [data, setData] = useState(null);
-  const { days, setDays } = useRange();
+  const { days, setDays, company } = useRange();
   const [exporting, setExporting] = useState(false);
   const chartsRef = useRef(null);
 
-  useEffect(() => { getAnalytics(days).then(setData); }, [days]);
+  useEffect(() => { getAnalytics(days, company || null).then(setData); }, [days, company]);
 
   const handleDownloadCharts = async () => {
     if (!chartsRef.current) return;
@@ -53,7 +53,9 @@ export default function AnalyticsPage() {
       <div className="page-header">
         <div>
           <h1>Analytics</h1>
-          <p className="page-sub">Deeper patterns across the last {days} days</p>
+          <p className="page-sub">
+            {company ? `${company} · ` : "Company-wide · "}deeper patterns across the last {days} days
+          </p>
         </div>
         <div className="header-actions">
           <div className="range-toggle">
