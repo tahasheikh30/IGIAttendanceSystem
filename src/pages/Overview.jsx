@@ -78,7 +78,7 @@ export default function Overview() {
         <StatCard label="Chronic latecomers" value={kpis.chronicLate} unit="employees" sub="late 60%+ of days" tone="danger" />
         <StatCard label="Avg late hours" value={`${kpis.avgOtHours}h`} unit="hours" sub="per employee" />
         <StatCard label="Missing punches" value={kpis.totalMissing} unit="days" tone="warn" />
-        <StatCard label="Short shifts" value={kpis.shortShiftTotal} unit="days" sub="came late, left early" tone={kpis.shortShiftTotal > 0 ? "warn" : undefined} />
+        <StatCard label="Early departures" value={kpis.totalEarly} unit="days" tone={kpis.totalEarly > 0 ? "warn" : undefined} />
         <StatCard label="Flagged employees" value={kpis.flagged} unit="employees" tone="danger" />
         <StatCard label="Punctual employees" value={kpis.punctual} unit="employees" tone="success" />
       </div>
@@ -110,7 +110,7 @@ export default function Overview() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Name</th><th>Department</th><th>Late %</th><th>Early %</th><th>Late hrs</th><th>Missing</th>
+                <th>Name</th><th>Department</th><th>Late %</th><th>Early</th><th>Late hrs</th><th>Missing</th>
               </tr>
             </thead>
             <tbody>
@@ -119,7 +119,7 @@ export default function Overview() {
                   <td className="td-name">{e.name}</td>
                   <td className="td-muted">{e.dept}</td>
                   <td className={e.latePct > 50 ? "td-danger" : ""}>{e.latePct}%</td>
-                  <td>{e.earlyPct}%</td>
+                  <td>{e.early}</td>
                   <td>{e.otHours}h</td>
                   <td className={e.missing > 3 ? "td-warn" : ""}>{e.missing}</td>
                 </tr>
