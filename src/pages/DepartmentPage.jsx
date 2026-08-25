@@ -20,7 +20,7 @@ export default function DepartmentPage() {
     try {
       await downloadDepartmentReport(dept, days, company || null);
     } catch {
-      window.alert("Couldn't generate the report — try again.");
+      window.alert("Couldn't generate the report - try again.");
     } finally {
       setDownloading(false);
     }

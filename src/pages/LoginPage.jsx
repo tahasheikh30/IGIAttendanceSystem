@@ -18,9 +18,9 @@ export default function LoginPage() {
       const status = err?.response?.status;
       const detail = err?.response?.data?.detail;
       if (status === 429) {
-        setError(detail || "Too many failed attempts — try again in a few minutes.");
+        setError(detail || "Too many failed attempts - try again in a few minutes.");
       } else {
-        setError(detail || "Couldn't sign in — try again.");
+        setError(detail || "Couldn't sign in - try again.");
       }
     } finally {
       setLoading(false);

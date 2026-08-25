@@ -42,7 +42,7 @@ export default function Sidebar() {
       <nav className="nav-section scroll">
         {depts.length === 0 && (
           <div className="nav-empty">
-            {company ? `No departments for ${company}` : "No data yet — upload a file"}
+            {company ? `No departments for ${company}` : "No data yet - upload a file"}
           </div>
         )}
         {depts.map(d => (

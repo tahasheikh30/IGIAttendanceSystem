@@ -23,7 +23,7 @@ export default function AboutPage() {
             and integrity.
           </p>
           <p className="tribute-body">
-            This system is a small, practical extension of that principle — using
+            This system is a small, practical extension of that principle - using
             accurate, well-organized data to help the people who keep the company
             running do their work a little better.
           </p>
@@ -32,7 +32,7 @@ export default function AboutPage() {
 
       <div className="card">
         <div className="section-label">Part of Packages Group</div>
-        <p className="hint">IGI Holdings and its subsidiaries — Insurance, Investments, Securities, FSI, and Life — operate under the Packages Group umbrella.</p>
+        <p className="hint">IGI Holdings and its subsidiaries - Insurance, Investments, Securities, FSI, and Life - operate under the Packages Group umbrella.</p>
         <img src="/assets/packages-group.jpg" alt="Packages Group companies" className="group-banner" />
       </div>
     </div>

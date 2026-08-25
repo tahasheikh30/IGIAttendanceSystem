@@ -37,7 +37,7 @@ export default function AnalyticsPage() {
       a.click();
       a.remove();
     } catch {
-      window.alert("Couldn't export the charts — try again.");
+      window.alert("Couldn't export the charts - try again.");
     } finally {
       setExporting(false);
     }
@@ -74,7 +74,7 @@ export default function AnalyticsPage() {
       <div ref={chartsRef}>
         <div className="card">
           <div className="section-label">Is attendance improving or worsening?</div>
-          <p className="hint">Weekly late rate, early-leave rate, and total late hours — use this to tell whether a fix you made actually worked</p>
+          <p className="hint">Weekly late rate, early-leave rate, and total late hours - use this to tell whether a fix you made actually worked</p>
           <ResponsiveContainer width="100%" height={270}>
             <LineChart data={weeklyTrend} margin={{ top: 4, right: 8, bottom: 20, left: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
@@ -93,7 +93,7 @@ export default function AnalyticsPage() {
         <div className="grid-2">
           <div className="card">
             <div className="section-label">Which day of the week is the problem?</div>
-            <p className="hint">Late rate by weekday — spot a Monday or Friday pattern worth addressing directly</p>
+            <p className="hint">Late rate by weekday - spot a Monday or Friday pattern worth addressing directly</p>
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={dayOfWeek} margin={{ top: 4, right: 8, bottom: 20, left: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
@@ -101,7 +101,7 @@ export default function AnalyticsPage() {
                 <YAxis tick={{ fontSize: 11 }} unit="%" label={{ value: "Late rate", angle: -90, position: "insideLeft", fontSize: 11, fill: "var(--text-muted)" }} />
                 <Tooltip
                   labelFormatter={(_, p) => p?.[0]?.payload?.day}
-                  formatter={(v, _key, entry) => [`${v}% late — ${entry.payload.scheduled} scheduled that day`, ""]}
+                  formatter={(v, _key, entry) => [`${v}% late - ${entry.payload.scheduled} scheduled that day`, ""]}
                 />
                 <Bar dataKey="latePct" radius={[4, 4, 0, 0]}>
                   {dayOfWeek.map((d, i) => {
@@ -118,14 +118,14 @@ export default function AnalyticsPage() {
               </BarChart>
             </ResponsiveContainer>
             <p className="hint" style={{ marginTop: 6 }}>
-              Faded bars run on a small sample (hover to see the count) — most weekends here reflect one dedicated
+              Faded bars run on a small sample (hover to see the count) - most weekends here reflect one dedicated
               on-call team, not the whole company, so they're not directly comparable to weekdays.
             </p>
           </div>
 
           <div className="card">
             <div className="section-label">When people are late, how late are they?</div>
-            <p className="hint">Distribution of minutes late across every late arrival — a few habitual 2h+ latecomers need a different conversation than a company-wide 10-minute drift</p>
+            <p className="hint">Distribution of minutes late across every late arrival - a few habitual 2h+ latecomers need a different conversation than a company-wide 10-minute drift</p>
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={lateDistribution} margin={{ top: 4, right: 8, bottom: 20, left: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
@@ -140,7 +140,7 @@ export default function AnalyticsPage() {
 
         <div className="card">
           <div className="section-label">Which department leads on which problem?</div>
-          <p className="hint">Top 6 departments by headcount, across four attendance metrics side by side — read each department's own bars, not the metrics against each other (a 20% late rate and a 20% late-hours rate aren't the same kind of problem)</p>
+          <p className="hint">Top 6 departments by headcount, across four attendance metrics side by side - read each department's own bars, not the metrics against each other (a 20% late rate and a 20% late-hours rate aren't the same kind of problem)</p>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={deptComparison} margin={{ top: 4, right: 8, bottom: 40, left: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
@@ -157,7 +157,7 @@ export default function AnalyticsPage() {
 
         <div className="card">
           <div className="section-label">Are there specific days that stand out?</div>
-          <p className="hint">Every day in the selected window — darker red means a higher share of scheduled staff were late that day. Hover any square for the date and exact rate.</p>
+          <p className="hint">Every day in the selected window - darker red means a higher share of scheduled staff were late that day. Hover any square for the date and exact rate.</p>
           <DailyHeatmap days={dailyHeatmap} />
           <div className="legend">
             <span className="legend-item"><span className="legend-swatch" style={{ background: "#C4E0F5" }} />Low late rate</span>

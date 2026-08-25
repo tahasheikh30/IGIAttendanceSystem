@@ -21,14 +21,14 @@ export default function UploadPage() {
       setStatus(summary);
       refreshHistory();
     } catch (e) {
-      setError(e?.response?.data?.detail || "Upload failed — check the file format");
+      setError(e?.response?.data?.detail || "Upload failed - check the file format");
       setStatus(null);
     }
   };
 
   const handleDelete = async (id, filename) => {
     if (!window.confirm(
-      `Delete "${filename}" permanently?\n\nThis removes the log entry AND any attendance data still attributed to it — rows a later upload hasn't since overwritten. If another upload has since replaced the same dates, only the log entry goes; if not, that attendance data is gone for good. This cannot be undone.`
+      `Delete "${filename}" permanently?\n\nThis removes the log entry AND any attendance data still attributed to it - rows a later upload hasn't since overwritten. If another upload has since replaced the same dates, only the log entry goes; if not, that attendance data is gone for good. This cannot be undone.`
     )) {
       return;
     }
@@ -40,7 +40,7 @@ export default function UploadPage() {
         window.alert(`Removed the log entry and ${result.attendance_rows_deleted} attendance rows that were still attributed to it.`);
       }
     } catch {
-      window.alert("Couldn't remove that entry — try again.");
+      window.alert("Couldn't remove that entry - try again.");
     } finally {
       setDeletingId(null);
     }
@@ -51,7 +51,7 @@ export default function UploadPage() {
       <div className="page-header">
         <div>
           <h1>Upload data</h1>
-          <p className="page-sub">Upload the latest export — new dates are added, existing dates are updated. History is kept for a year.</p>
+          <p className="page-sub">Upload the latest export - new dates are added, existing dates are updated. History is kept for a year.</p>
         </div>
       </div>
 

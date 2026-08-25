@@ -96,7 +96,7 @@ export default function Overview() {
               Employees needing attention ({data.flaggedEmployees.length})
             </div>
             <p className="hint" style={{ marginBottom: 0 }}>
-              Every flagged employee company-wide, ranked by anomaly score — deviation from department norms, missing punches, and short shifts
+              Every flagged employee company-wide, ranked by anomaly score - deviation from department norms, missing punches, and short shifts
             </p>
           </div>
           <input

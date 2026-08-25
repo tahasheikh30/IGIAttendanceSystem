@@ -22,7 +22,7 @@ export default function EmployeeDrawer({ empNo, onClose }) {
     try {
       await downloadEmployeeReport(empNo, data?.name || empNo, range);
     } catch {
-      window.alert("Couldn't generate the report — try again.");
+      window.alert("Couldn't generate the report-try again.");
     } finally {
       setDownloading(false);
     }
@@ -95,7 +95,7 @@ export default function EmployeeDrawer({ empNo, onClose }) {
               <>
                 <div className="section-label">Time spent in office, by week</div>
                 <p className="hint">
-                  Total hours between clock-in and clock-out on days actually worked — figures below are in hours.
+                  Total hours between clock-in and clock-out on days actually worked - figures below are in hours.
                   Rest days, holidays, leave, and missing punches aren't counted (there's no in/out to measure).
                 </p>
                 <div className="table-scroll" style={{ maxHeight: 220, marginBottom: 20 }}>
