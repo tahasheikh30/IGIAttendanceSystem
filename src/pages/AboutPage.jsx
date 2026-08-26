@@ -45,7 +45,7 @@ export default function AboutPage() {
           Securities, FSI, and Life - operate under the Packages Group umbrella.
         </p>
         <img
-          src="/assets/packages-group.jpg"
+          src="/assets/packages-about.jpg"
           alt="Packages Group companies"
           className="group-banner"
         />
