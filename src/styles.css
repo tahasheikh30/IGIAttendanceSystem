@@ -106,6 +106,19 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 }
 .chip-active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
+/* ---------- Navbar ---------- */
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+.navbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; flex: 1; min-width: 150px; }
 .stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }

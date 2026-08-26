@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getOverview, getCompanies } from "../api";
+import { getOverview } from "../api";
 import StatCard from "../components/StatCard";
 import DeptBarChart from "../components/DeptBarChart";
 import EmployeeDrawer from "../components/EmployeeDrawer";
@@ -7,14 +7,9 @@ import { useRange } from "../context/RangeContext";
 
 export default function Overview() {
   const [data, setData] = useState(null);
-  const { days, setDays, company, setCompany } = useRange();
+  const { days, company } = useRange();
   const [openEmp, setOpenEmp] = useState(null);
   const [search, setSearch] = useState("");
-  const [companies, setCompanies] = useState([]);
-
-  useEffect(() => {
-    getCompanies().then(setCompanies).catch(() => setCompanies([]));
-  }, []);
 
   useEffect(() => {
     getOverview(days, company || null).then(setData);
@@ -47,28 +42,6 @@ export default function Overview() {
           <p className="page-sub">
             {company ? `${company} · ` : "Company-wide · "}attendance, last {days} days
           </p>
-        </div>
-        <div className="header-actions">
-          {companies.length > 0 && (
-            <div className="company-select-wrap">
-              <select value={company} onChange={e => setCompany(e.target.value)} className="company-select">
-                <option value="">All companies</option>
-                {companies.map(c => (
-                  <option key={c.company} value={c.company}>{c.company} ({c.employees})</option>
-                ))}
-              </select>
-              <svg className="company-select-icon" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-          )}
-          <div className="range-toggle">
-            {[30, 90, 180, 365].map(r => (
-              <button key={r} className={"chip" + (days === r ? " chip-active" : "")} onClick={() => setDays(r)}>
-                {r === 365 ? "1 year" : `${r}d`}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 

@@ -8,7 +8,7 @@ import { useRange } from "../context/RangeContext";
 export default function DepartmentPage() {
   const { dept } = useParams();
   const [data, setData] = useState(null);
-  const { days, setDays, company } = useRange();
+  const { days, company } = useRange();
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("anomalyScore");
   const [openEmp, setOpenEmp] = useState(null);
@@ -61,13 +61,6 @@ export default function DepartmentPage() {
           <p className="page-sub">{company ? `${company} · ` : ""}{kpis.employees} employees · last {days} days</p>
         </div>
         <div className="header-actions">
-          <div className="range-toggle">
-            {[30, 90, 180, 365].map(r => (
-              <button key={r} className={"chip" + (days === r ? " chip-active" : "")} onClick={() => setDays(r)}>
-                {r === 365 ? "1 year" : `${r}d`}
-              </button>
-            ))}
-          </div>
           <button className="btn-primary" onClick={handleDownload} disabled={downloading}>
             {downloading ? "Generating…" : "Download PDF report"}
           </button>

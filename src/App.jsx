@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
 import Overview from "./pages/Overview";
 import DepartmentPage from "./pages/DepartmentPage";
 import UploadPage from "./pages/UploadPage";
@@ -15,6 +16,7 @@ function AuthedApp() {
       <div className="app-shell">
         <Sidebar />
         <main className="main-content">
+          <Navbar />
           <Routes>
             <Route path="/" element={<Overview />} />
             <Route path="/analytics" element={<AnalyticsPage />} />

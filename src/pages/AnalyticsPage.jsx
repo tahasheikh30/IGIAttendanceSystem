@@ -12,7 +12,7 @@ const METRIC_COLORS = { "Late %": "#D85A30", "Early leave %": "#D4537E", "Late h
 
 export default function AnalyticsPage() {
   const [data, setData] = useState(null);
-  const { days, setDays, company } = useRange();
+  const { days, company } = useRange();
   const [exporting, setExporting] = useState(false);
   const chartsRef = useRef(null);
 
@@ -58,13 +58,6 @@ export default function AnalyticsPage() {
           </p>
         </div>
         <div className="header-actions">
-          <div className="range-toggle">
-            {[30, 90, 180, 365].map(r => (
-              <button key={r} className={"chip" + (days === r ? " chip-active" : "")} onClick={() => setDays(r)}>
-                {r === 365 ? "1 year" : `${r}d`}
-              </button>
-            ))}
-          </div>
           <button className="btn-primary" onClick={handleDownloadCharts} disabled={exporting}>
             {exporting ? "Preparing…" : "Download charts"}
           </button>
