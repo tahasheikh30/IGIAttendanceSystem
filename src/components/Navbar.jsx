@@ -21,22 +21,26 @@ export default function Navbar() {
   // that doesn't exist there -- so the company dropdown is suppressed here.
   // The period selector still applies fine, so it stays.
   const isDepartmentPage = location.pathname.startsWith("/department/");
+  const showCompanySelect = !isDepartmentPage && companies.length > 0;
 
   return (
     <div className="navbar">
       <div className="navbar-controls">
-        {!isDepartmentPage && companies.length > 0 && (
-          <div className="company-select-wrap">
-            <select value={company} onChange={e => setCompany(e.target.value)} className="company-select">
-              <option value="">All companies</option>
-              {companies.map(c => (
-                <option key={c.company} value={c.company}>{c.company} ({c.employees})</option>
-              ))}
-            </select>
-            <svg className="company-select-icon" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
+        {showCompanySelect && (
+          <>
+            <div className="company-select-wrap">
+              <select value={company} onChange={e => setCompany(e.target.value)} className="company-select">
+                <option value="">All companies</option>
+                {companies.map(c => (
+                  <option key={c.company} value={c.company}>{c.company} ({c.employees})</option>
+                ))}
+              </select>
+              <svg className="company-select-icon" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <div className="navbar-divider" aria-hidden="true" />
+          </>
         )}
         <div className="range-toggle">
           {[30, 90, 180, 365].map(r => (
