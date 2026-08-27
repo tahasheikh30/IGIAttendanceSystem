@@ -41,14 +41,6 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="brand">
-        <img src="/assets/igi-logo.png" alt="IGI Holdings" className="brand-logo" />
-        <div>
-          <div className="brand-title">Attendance</div>
-          <div className="brand-sub">Intelligence</div>
-        </div>
-      </div>
-
       <nav className="nav-section">
         <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
           Overview

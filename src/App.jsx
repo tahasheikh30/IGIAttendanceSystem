@@ -16,19 +16,22 @@ function AuthedApp() {
   return (
     <RangeProvider>
       <div className="app-shell">
-        <Sidebar />
-        <main className="main-content">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Overview />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
-            <Route path="/department/:dept" element={<DepartmentPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            {isAdmin && <Route path="/upload" element={<UploadPage />} />}
-            {isAdmin && <Route path="/users" element={<UsersPage />} />}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
+        <div className="brand-strip" />
+        <Navbar />
+        <div className="app-body">
+          <Sidebar />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Overview />} />
+              <Route path="/analytics" element={<AnalyticsPage />} />
+              <Route path="/department/:dept" element={<DepartmentPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              {isAdmin && <Route path="/upload" element={<UploadPage />} />}
+              {isAdmin && <Route path="/users" element={<UsersPage />} />}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </div>
       </div>
     </RangeProvider>
   );

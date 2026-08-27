@@ -7,8 +7,8 @@ import { useAuth } from "../context/AuthContext";
 const ROLE_LABEL = { admin: "HR admin", hod: "Head of Department", manager: "Manager" };
 
 // Pages that don't need the company/period controls. The navbar itself
-// (profile + sign out) still renders everywhere -- it used to live in the
-// sidebar's footer, which meant it disappeared on these same pages too.
+// (brand, profile, sign out) still renders everywhere -- it's the app's
+// top bar now, not something scoped to a subset of pages.
 const HIDDEN_ON = ["/upload", "/about", "/users"];
 
 function initialsFor(name) {
@@ -44,9 +44,22 @@ export default function Navbar() {
 
   return (
     <div className="navbar">
+      <div className="navbar-brand">
+        <img src="/assets/igi-logo.png" alt="IGI Holdings" className="navbar-brand-logo" />
+        <div>
+          <div className="navbar-brand-title">Attendance</div>
+          <div className="navbar-brand-sub">Intelligence</div>
+        </div>
+      </div>
+
       <div className="navbar-controls">
         {showCompanyDropdown && (
           <div className="company-select-wrap">
+            <span className="company-select-badge">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 14V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v11M2 14h11M9 14V7h4a1 1 0 0 1 1 1v6M4.5 4.5h1M4.5 7h1M4.5 9.5h1M7 4.5h1M7 7h1M7 9.5h1" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
             <select value={company} onChange={e => setCompany(e.target.value)} className="company-select">
               <option value="">All companies</option>
               {companies.map(c => (
