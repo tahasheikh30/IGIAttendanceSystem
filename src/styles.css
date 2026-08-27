@@ -149,7 +149,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   border-right: 1px solid var(--border);
   flex-shrink: 0;
 }
-.navbar-brand-logo { width: 54px; height: 54px; object-fit: contain; flex-shrink: 0; }
+.navbar-brand-logo { width: 70px; height: 70px; object-fit: contain; flex-shrink: 0; }
 .navbar-brand-title { font-weight: 600; font-size: 16px; line-height: 1.2; }
 .navbar-brand-sub { font-size: 12px; color: var(--text-muted); }
 
