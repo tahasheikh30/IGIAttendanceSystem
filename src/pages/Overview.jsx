@@ -4,10 +4,12 @@ import StatCard from "../components/StatCard";
 import DeptBarChart from "../components/DeptBarChart";
 import EmployeeDrawer from "../components/EmployeeDrawer";
 import { useRange } from "../context/RangeContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function Overview() {
   const [data, setData] = useState(null);
   const { days, company } = useRange();
+  const { isAdmin, isHod } = useAuth();
   const [openEmp, setOpenEmp] = useState(null);
   const [search, setSearch] = useState("");
 
@@ -40,7 +42,12 @@ export default function Overview() {
         <div>
           <h1>Overview</h1>
           <p className="page-sub">
-            {company ? `${company} · ` : "Company-wide · "}attendance, last {days} days
+            {isAdmin
+              ? (company ? `${company} · ` : "Company-wide · ")
+              : isHod
+                ? (company ? `${company} · ` : "Your companies · ")
+                : "Your departments · "}
+            attendance, last {days} days
           </p>
         </div>
       </div>

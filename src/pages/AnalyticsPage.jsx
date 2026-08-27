@@ -7,12 +7,14 @@ import { toPng } from "html-to-image";
 import { getAnalytics } from "../api";
 import DailyHeatmap from "../components/DailyHeatmap";
 import { useRange } from "../context/RangeContext";
+import { useAuth } from "../context/AuthContext";
 
 const METRIC_COLORS = { "Late %": "#D85A30", "Early leave %": "#D4537E", "Late hours %": "#1C74B8", "Anomaly %": "#A5680B" };
 
 export default function AnalyticsPage() {
   const [data, setData] = useState(null);
   const { days, company } = useRange();
+  const { isAdmin, isHod } = useAuth();
   const [exporting, setExporting] = useState(false);
   const chartsRef = useRef(null);
 
@@ -54,7 +56,12 @@ export default function AnalyticsPage() {
         <div>
           <h1>Analytics</h1>
           <p className="page-sub">
-            {company ? `${company} · ` : "Company-wide · "}deeper patterns across the last {days} days
+            {isAdmin
+              ? (company ? `${company} · ` : "Company-wide · ")
+              : isHod
+                ? (company ? `${company} · ` : "Your companies · ")
+                : "Your departments · "}
+            deeper patterns across the last {days} days
           </p>
         </div>
         <div className="header-actions">

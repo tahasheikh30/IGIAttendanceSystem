@@ -42,6 +42,8 @@ api.interceptors.response.use(
 export const login = (username, password) =>
   api.post("/auth/login", { username, password }).then(r => r.data);
 
+export const getMe = () => api.get("/me").then(r => r.data);
+
 export const getOverview = (days = 30, company = null) => {
   const q = company ? `?days=${days}&company=${encodeURIComponent(company)}` : `?days=${days}`;
   return api.get(`/overview${q}`).then(r => r.data);
@@ -102,5 +104,16 @@ export const uploadFile = (file, onProgress) => {
     onUploadProgress: onProgress,
   }).then(r => r.data);
 };
+
+// ---------- User management (admin only) ----------
+export const getUsers = () => api.get("/users").then(r => r.data);
+export const createUser = (user) => api.post("/users", user).then(r => r.data);
+export const updateUser = (id, patch) => api.patch(`/users/${id}`, patch).then(r => r.data);
+export const resetUserPassword = (id, password) =>
+  api.post(`/users/${id}/reset-password`, { password }).then(r => r.data);
+export const deleteUser = (id) => api.delete(`/users/${id}`).then(r => r.data);
+// Every (company, dept) pair with a headcount -- used to build the
+// department-grant picker when creating/editing a manager account.
+export const getAllDepartments = () => api.get("/departments/all").then(r => r.data);
 
 export default api;

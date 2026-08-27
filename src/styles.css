@@ -110,13 +110,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .navbar {
   display: flex;
   justify-content: flex-end;
-  align-items: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 8px 12px;
   margin-bottom: 20px;
-  box-shadow: 0 1px 2px rgba(18, 34, 47, 0.05);
 }
 .navbar-controls {
   display: flex;
@@ -124,39 +118,40 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   gap: 12px;
   flex-wrap: wrap;
 }
-.navbar-divider {
-  width: 1px;
-  height: 22px;
-  background: var(--border);
+
+/* ---------- User management ---------- */
+.dept-picker {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  max-height: 260px;
+  overflow-y: auto;
+  margin-bottom: 4px;
+}
+.dept-picker-group + .dept-picker-group { margin-top: 12px; }
+.dept-picker-company {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+.dept-picker-list { display: flex; flex-direction: column; gap: 5px; }
+.dept-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
-/* Segmented pill control, scoped to the navbar so other .range-toggle /
-   .chip usages elsewhere on the page keep their existing look. */
-.navbar .range-toggle {
-  display: flex;
-  gap: 2px;
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 3px;
-}
-.navbar .chip {
-  border: none;
-  background: transparent;
-  border-radius: 999px;
-  padding: 6px 13px;
-  font-size: 12.5px;
-  font-weight: 500;
+.footer-user {
+  font-size: 12px;
   color: var(--text-secondary);
-  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+  text-align: center;
+  margin-bottom: 2px;
 }
-.navbar .chip:hover { color: var(--text); }
-.navbar .chip-active {
-  background: var(--surface);
-  color: var(--accent-dark);
-  box-shadow: 0 1px 3px rgba(18, 34, 47, 0.14);
-}
-.navbar .chip-active:hover { color: var(--accent-dark); }
 
 .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; flex: 1; min-width: 150px; }
@@ -178,7 +173,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: var(--surface-muted);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 8px 34px 8px 16px;
@@ -188,14 +183,10 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   cursor: pointer;
   transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
 }
-.company-select:hover {
-  border-color: var(--accent);
-  background: var(--surface);
-}
+.company-select:hover { border-color: var(--accent); }
 .company-select:focus {
   outline: none;
   border-color: var(--accent);
-  background: var(--surface);
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 .company-select-icon {
@@ -205,12 +196,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   height: 9px;
   pointer-events: none;
   color: var(--text-muted);
-  transition: transform .18s ease, color .18s ease;
-}
-.company-select-wrap:hover .company-select-icon { color: var(--accent); }
-.company-select-wrap:focus-within .company-select-icon {
-  color: var(--accent);
-  transform: rotate(180deg);
 }
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
