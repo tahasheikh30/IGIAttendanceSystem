@@ -28,7 +28,7 @@ export default function DepartmentPage() {
 
   useEffect(() => {
     setError(null);
-    getDepartment(dept, days, company || null).then(setData).catch(() => setError(true));
+    getDepartment(dept, days, company || null).then(setData).catch(err => setError(err));
   }, [dept, days, company]);
 
   const employees = useMemo(() => {
@@ -42,10 +42,33 @@ export default function DepartmentPage() {
   }, [data, search, sortKey]);
 
   if (error) {
+    // Distinguish "you're not allowed to see this" from "there's genuinely
+    // no data" from anything else -- these used to all collapse into the
+    // same "no data" message, which made a permissions/data-mismatch bug
+    // look identical to an empty date range and much harder to diagnose.
+    const status = error?.response?.status;
+    const detail = error?.response?.data?.detail;
+
+    if (status === 403) {
+      return (
+        <div className="empty-state">
+          <div className="empty-title">You don't have access to {dept}</div>
+          <p>{detail || "Ask an admin to grant you this department."}</p>
+        </div>
+      );
+    }
+    if (status === 404) {
+      return (
+        <div className="empty-state">
+          <div className="empty-title">No data for {dept}{company ? ` in ${company}` : ""} in this window</div>
+          <p>Try a wider date range, or upload more history.</p>
+        </div>
+      );
+    }
     return (
       <div className="empty-state">
-        <div className="empty-title">No data for {dept}{company ? ` in ${company}` : ""} in this window</div>
-        <p>Try a wider date range, or upload more history.</p>
+        <div className="empty-title">Couldn't load {dept}</div>
+        <p>{detail || "Something went wrong - try again."}</p>
       </div>
     );
   }
