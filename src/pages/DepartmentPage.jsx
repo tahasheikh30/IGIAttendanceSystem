@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getDepartment, downloadDepartmentReport } from "../api";
 import StatCard from "../components/StatCard";
 import EmployeeDrawer from "../components/EmployeeDrawer";
@@ -8,7 +8,20 @@ import { useRange } from "../context/RangeContext";
 export default function DepartmentPage() {
   const { dept } = useParams();
   const [data, setData] = useState(null);
-  const { days, company } = useRange();
+  const { days, company: contextCompany } = useRange();
+  const [searchParams] = useSearchParams();
+  // The URL's own ?company= -- set by whichever list linked here (the
+  // sidebar's "My departments" for managers/HODs, or the dept bar chart
+  // under whatever company is currently selected) -- is the definitive
+  // company for this department page. RangeContext's `company` stays ""
+  // for a manager (they have no company selector at all) and for an
+  // HOD/admin viewing "all companies", even when the department itself
+  // only exists under one specific company. Reading only from context
+  // (as this used to) silently drops that company on every request,
+  // which fails the exact-match access check for any manager whose
+  // grant is properly scoped to a company. Falling back to context only
+  // covers old links that never carried a company on the URL.
+  const company = searchParams.get("company") || contextCompany;
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("anomalyScore");
   const [openEmp, setOpenEmp] = useState(null);
