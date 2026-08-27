@@ -59,7 +59,7 @@ export default function Sidebar() {
           </NavLink>
         )}
         <NavLink to="/about" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
-          About the founder
+          About
         </NavLink>
       </nav>
 
