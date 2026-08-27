@@ -149,7 +149,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   border-right: 1px solid var(--border);
   flex-shrink: 0;
 }
-.navbar-brand-logo { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; }
+.navbar-brand-logo { width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; }
 .navbar-brand-title { font-weight: 600; font-size: 14px; line-height: 1.2; }
 .navbar-brand-sub { font-size: 11.5px; color: var(--text-muted); }
 
@@ -259,23 +259,31 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .stat-unit { font-weight: 400; color: var(--text-muted); font-size: 11px; text-transform: none; letter-spacing: 0; }
 
 /* ---------- Company dropdown ---------- */
-.company-select-wrap {
-  position: relative;
+/* A real <select>'s open option list is drawn by the OS/browser, not by our
+   CSS, so it can never pick up the app's styling. This is a custom
+   button + floating menu instead, built entirely with our own markup, so
+   every pixel of it -- open or closed -- is actually themeable. */
+.company-dropdown { position: relative; }
+
+.company-dropdown-trigger {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 5px 30px 5px 6px;
+  padding: 5px 10px 5px 6px;
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  font: inherit;
+  color: var(--text);
+  cursor: pointer;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
-.company-select-wrap:hover {
+.company-dropdown-trigger:hover {
   border-color: var(--accent);
   box-shadow: 0 4px 10px rgba(16, 24, 40, 0.08);
 }
-.company-select-wrap:focus-within {
+.company-dropdown-trigger[aria-expanded="true"] {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-light);
 }
@@ -290,29 +298,70 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   background: var(--accent-light);
   color: var(--accent-dark);
 }
-.company-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  border: none;
-  background: transparent;
-  padding: 3px 0;
-  margin: 0;
+.company-dropdown-label {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text);
-  cursor: pointer;
-  max-width: 190px;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.company-select:focus { outline: none; }
-.company-select-icon {
-  position: absolute;
-  right: 12px;
+.company-dropdown-chevron {
   width: 9px;
   height: 9px;
-  pointer-events: none;
   color: var(--accent);
+  flex-shrink: 0;
+  transition: transform .15s ease;
 }
+.company-dropdown-trigger[aria-expanded="true"] .company-dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+.company-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 250px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 16px 32px rgba(16, 24, 40, 0.14), 0 2px 6px rgba(16, 24, 40, 0.06);
+  padding: 6px;
+  z-index: 40;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.company-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+}
+.company-dropdown-item:hover { background: var(--surface-muted); }
+.company-dropdown-item.is-selected { background: var(--accent-light); color: var(--accent-dark); font-weight: 600; }
+.company-dropdown-count { font-size: 11.5px; color: var(--text-muted); flex-shrink: 0; }
+.company-dropdown-item.is-selected .company-dropdown-count { color: var(--accent-dark); }
+.company-dropdown-check {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--accent);
+  visibility: hidden;
+  margin-right: 8px;
+  vertical-align: -2px;
+}
+.company-dropdown-item.is-selected .company-dropdown-check { visibility: visible; }
+
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
 .card-danger { background: var(--danger-light); border-color: #EEC7B7; color: #8a3016; }
