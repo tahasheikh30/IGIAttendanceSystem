@@ -33,24 +33,26 @@ function DepartmentPicker({ allDepts, selected, onChange }) {
 
   return (
     <div className="dept-picker">
-      {Object.entries(byCompany).map(([company, depts]) => (
-        <div key={company} className="dept-picker-group">
-          <div className="dept-picker-company">{company}</div>
-          <div className="dept-picker-list">
-            {depts.map(d => (
-              <label key={`${d.company}:${d.dept}`} className="dept-picker-item">
-                <input
-                  type="checkbox"
-                  checked={isChecked(d.company, d.dept)}
-                  onChange={() => toggle(d.company, d.dept)}
-                />
-                {d.dept} <span className="td-muted">({d.employees})</span>
-              </label>
-            ))}
+      <div className="dept-picker-inner">
+        {Object.entries(byCompany).map(([company, depts]) => (
+          <div key={company} className="dept-picker-group">
+            <div className="dept-picker-company">{company}</div>
+            <div className="dept-picker-list">
+              {depts.map(d => (
+                <label key={`${d.company}:${d.dept}`} className="dept-picker-item">
+                  <input
+                    type="checkbox"
+                    checked={isChecked(d.company, d.dept)}
+                    onChange={() => toggle(d.company, d.dept)}
+                  />
+                  <span className="dept-picker-name">{d.dept}</span> <span className="td-muted">({d.employees})</span>
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-      {allDepts.length === 0 && <p className="hint">No department data yet - upload an export first.</p>}
+        ))}
+        {allDepts.length === 0 && <p className="hint">No department data yet - upload an export first.</p>}
+      </div>
     </div>
   );
 }

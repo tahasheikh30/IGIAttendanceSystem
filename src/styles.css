@@ -280,7 +280,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .dept-picker {
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 6px;
   max-height: 280px;
   overflow-y: auto;
   margin-bottom: 4px;
@@ -294,6 +293,14 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .dept-picker::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
 .dept-picker::-webkit-scrollbar-thumb:hover { background: #B9C4D2; }
 
+/* Padding lives here, on a non-scrolling wrapper, rather than on
+   .dept-picker itself. Sticky headers below are positioned relative to
+   .dept-picker's scrollport -- if that element also carried the padding,
+   the sticky offset would be computed against a scrollport that already
+   includes it, leaving a thin sliver of the previous group's last row
+   visible above the "stuck" header while scrolling. */
+.dept-picker-inner { padding: 6px; }
+
 .dept-picker-group { padding: 8px 6px 10px; }
 .dept-picker-group + .dept-picker-group { margin-top: 2px; border-top: 1px solid var(--border); }
 .dept-picker-company {
@@ -302,7 +309,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   color: var(--accent-dark);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 8px;
+  margin: 0 -6px 8px;
   padding: 4px 6px;
   position: sticky;
   top: 0;
@@ -320,6 +327,13 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   padding: 7px 8px;
   border-radius: 8px;
   transition: background .12s ease;
+  min-width: 0;
+}
+.dept-picker-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 .dept-picker-item:hover { background: var(--surface-muted); }
 .dept-picker-item input[type="checkbox"] {
