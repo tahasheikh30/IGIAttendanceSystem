@@ -109,14 +109,81 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 /* ---------- Navbar ---------- */
 .navbar {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 36px;
+  margin: -28px -36px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
 }
 .navbar-controls {
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.navbar-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  padding-left: 16px;
+  border-left: 1px solid var(--border);
+}
+.navbar-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.navbar-profile-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.navbar-profile-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.navbar-profile-role { font-size: 11px; color: var(--text-muted); }
+
+.navbar-signout {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+.navbar-signout:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-light);
+}
+
+@media (max-width: 640px) {
+  .navbar { padding: 12px 16px; margin: -28px -16px 20px; flex-wrap: wrap; }
+  .navbar-profile { margin-left: 0; padding-left: 0; border-left: none; }
+  .navbar-profile-info { display: none; }
 }
 
 /* ---------- User management ---------- */
@@ -146,13 +213,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   cursor: pointer;
 }
 
-.footer-user {
-  font-size: 12px;
-  color: var(--text-secondary);
-  text-align: center;
-  margin-bottom: 2px;
-}
-
 .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
 .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; flex: 1; min-width: 150px; }
 .stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
@@ -173,29 +233,40 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: var(--surface);
+  background: var(--surface-muted);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 8px 34px 8px 16px;
+  padding: 8px 36px 8px 16px;
   font-size: 13px;
   font-weight: 500;
   color: var(--text);
   cursor: pointer;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
   transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
 }
-.company-select:hover { border-color: var(--accent); }
+.company-select:hover {
+  border-color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 2px 6px rgba(16, 24, 40, 0.06);
+}
 .company-select:focus {
   outline: none;
   border-color: var(--accent);
+  background: var(--surface);
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 .company-select-icon {
   position: absolute;
-  right: 13px;
+  right: 14px;
   width: 9px;
   height: 9px;
   pointer-events: none;
-  color: var(--text-muted);
+  color: var(--accent);
+  transition: transform .15s ease;
+}
+.company-select-wrap:hover .company-select-icon,
+.company-select:focus + .company-select-icon {
+  transform: translateY(1px);
 }
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 20px; }
@@ -368,4 +439,3 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   margin-bottom: 14px;
 }
 .login-submit { width: 100%; justify-content: center; padding: 10px; font-size: 14px; margin-top: 4px; }
-.logout-btn { font-size: 12px; margin-bottom: 8px; }

@@ -4,11 +4,9 @@ import { getDepartments } from "../api";
 import { useAuth } from "../context/AuthContext";
 import { useRange } from "../context/RangeContext";
 
-const ROLE_LABEL = { admin: "HR admin", hod: "Head of Department", manager: "Manager" };
-
 export default function Sidebar() {
   const [depts, setDepts] = useState([]);
-  const { logout, isAdmin, isHod, role, me } = useAuth();
+  const { isAdmin, isHod, role } = useAuth();
   const { company } = useRange();
 
   useEffect(() => {
@@ -91,8 +89,6 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
-        {me && <div className="footer-user">{me.name} · {ROLE_LABEL[me.role] || me.role}</div>}
-        <button className="btn-ghost logout-btn" onClick={logout}>Sign out</button>
         <img src="/assets/packages-group.jpg" alt="Packages Group" className="footer-logo" />
         <div className="footer-caption">Part of Packages Group</div>
       </div>
