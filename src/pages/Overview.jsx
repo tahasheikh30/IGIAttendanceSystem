@@ -116,22 +116,24 @@ export default function Overview() {
         <div className="card">
           <div className="section-label">Punctual employees</div>
           <p className="hint">Never late, no missing punches, minimum 5 scheduled days</p>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th><th>Department</th><th>Days on record</th>
-              </tr>
-            </thead>
-            <tbody>
-              {topPunctual.map(e => (
-                <tr key={e.empNo} onClick={() => setOpenEmp(e.empNo)}>
-                  <td className="td-name">{e.name} <span className="badge-success">Punctual</span></td>
-                  <td className="td-muted">{e.dept}</td>
-                  <td>{e.scheduled}</td>
+          <div className="table-scroll">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th><th>Department</th><th>Days on record</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {topPunctual.map(e => (
+                  <tr key={e.empNo} onClick={() => setOpenEmp(e.empNo)}>
+                    <td className="td-name">{e.name} <span className="badge-success">Punctual</span></td>
+                    <td className="td-muted">{e.dept}</td>
+                    <td>{e.scheduled}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
