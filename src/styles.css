@@ -156,16 +156,14 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 /* ---------- Navbar ---------- */
 .navbar {
   display: flex;
-  flex-wrap: wrap;
-  row-gap: 10px;
   align-items: center;
-  gap: 28px;
+  gap: 20px;
   width: 100%;
-  min-height: var(--navbar-h);
+  height: var(--navbar-h);
   flex-shrink: 0;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 10px 28px;
+  padding: 0 28px;
   position: sticky;
   top: 0;
   z-index: 30;
@@ -188,25 +186,26 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   display: flex;
   align-items: center;
   gap: 12px;
-  /* flex-shrink: 0 means this group is never compressed -- if it doesn't
-     fit next to the brand and the right-hand group on one row, it wraps
-     to its own full-width row (flex-grow: 1) instead of squeezing (which
-     wrapped "1 year" onto two lines) or overflowing past the edge (which
-     pushed Sign out off the navbar). This works at any viewport width,
-     not just below a hardcoded breakpoint. DOM order (brand, controls,
-     right) already puts it in the right visual position, so no explicit
-     `order` is needed here -- and adding one would fight the `order: -1`
-     trick .employee-search relies on inside the ≤860px breakpoint below. */
-  flex-shrink: 0;
-  flex-grow: 1;
+  /* This is the ONLY part of the navbar allowed to give up space: it
+     takes whatever room is left after the brand and the right-hand
+     group (search/profile/sign out) take their fixed natural width
+     (flex: 1 1 0 + min-width: 0, rather than flex-wrap on the whole
+     navbar). If the company dropdown + chips still don't fit in that
+     leftover space, this row scrolls horizontally on its own instead
+     of pushing anything else around -- brand and the right-hand group
+     never move, at any viewport width. */
+  flex: 1 1 0;
   min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
+.navbar-controls::-webkit-scrollbar { height: 5px; }
+.navbar-controls::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
 
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-left: auto;
   flex-shrink: 0;
 }
 
@@ -496,11 +495,11 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .company-dropdown-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 5px 10px 5px 6px;
+  padding: 5px 8px 5px 5px;
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
   font: inherit;
   color: var(--text);
@@ -516,9 +515,9 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 .company-select-badge {
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -529,7 +528,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .company-dropdown-label {
   font-size: 13px;
   font-weight: 600;
-  max-width: 160px;
+  max-width: 130px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
