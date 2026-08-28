@@ -586,19 +586,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .tribute-subheading { font-size: 13.5px; color: rgba(255,255,255,0.8); margin-bottom: 14px; }
 .tribute-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 10px; max-width: 560px; }
 /* ---------- Leadership grid ---------- */
-.leadership-intro {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.leadership-intro .section-label { margin-bottom: 6px; }
-.leadership-intro .hint { margin-bottom: 0; max-width: 560px; }
-.leadership-stat { text-align: right; flex-shrink: 0; }
-.leadership-stat-num { font-size: 26px; font-weight: 700; color: var(--accent-dark); line-height: 1; }
-.leadership-stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
 
 .leadership-grid {
   display: grid;
