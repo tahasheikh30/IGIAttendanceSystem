@@ -83,7 +83,7 @@ export default function EmployeeDrawer({ empNo, onClose }) {
                 </div>
                 <div className="drawer-sub">{data.dept} · {data.grade || "—"} · ID {data.empNo}</div>
               </div>
-              <button className="btn-ghost" onClick={onClose}>Close ×</button>
+              <button className="drawer-close" onClick={onClose} aria-label="Close">×</button>
             </div>
 
             <div className="header-actions" style={{ marginBottom: 16 }}>
