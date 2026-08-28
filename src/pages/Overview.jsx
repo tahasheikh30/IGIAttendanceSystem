@@ -8,14 +8,14 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Overview() {
   const [data, setData] = useState(null);
-  const { days, company } = useRange();
+  const { days, company, period } = useRange();
   const { isAdmin, isHod } = useAuth();
   const [openEmp, setOpenEmp] = useState(null);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getOverview(days, company || null).then(setData);
-  }, [days, company]);
+    getOverview(days, company || null, period).then(setData);
+  }, [days, company, period]);
 
   const filteredFlagged = useMemo(() => {
     if (!data) return [];
@@ -47,7 +47,7 @@ export default function Overview() {
               : isHod
                 ? (company ? `${company} · ` : "Your companies · ")
                 : "Your departments · "}
-            attendance, last {days} days
+            attendance · {data.windowLabel || `Last ${days} days`}
           </p>
         </div>
       </div>

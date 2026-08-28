@@ -1,32 +1,48 @@
 import { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine, Legend } from "recharts";
-import { getEmployee, downloadEmployeeReport } from "../api";
+import { getEmployee, downloadEmployeeReport, getPeriods } from "../api";
 import StatCard from "./StatCard";
 import CalendarStrip, { CodeLegend } from "./CalendarStrip";
 
 export default function EmployeeDrawer({ empNo, onClose }) {
   const [data, setData] = useState(null);
   const [range, setRange] = useState(30);
+  // The drawer keeps its own window state (like `range` above) rather than
+  // sharing RangeContext's `period` -- someone drilling into one employee
+  // may well want a different pay period than whatever's selected on the
+  // page behind it. Picking a period here clears `range`'s "active" chip
+  // the same way RangeContext does at the page level.
+  const [period, setPeriod] = useState(null);
+  const [periodsList, setPeriodsList] = useState(null);
+  const [periodMenuOpen, setPeriodMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    getEmployee(empNo, range).then(setData).finally(() => setLoading(false));
-  }, [empNo, range]);
+    getEmployee(empNo, range, period).then(setData).finally(() => setLoading(false));
+  }, [empNo, range, period]);
+
+  useEffect(() => {
+    if (periodMenuOpen && periodsList === null) {
+      getPeriods().then(setPeriodsList).catch(() => setPeriodsList([]));
+    }
+  }, [periodMenuOpen, periodsList]);
 
   if (!empNo) return null;
 
   const handleDownload = async () => {
     setDownloading(true);
     try {
-      await downloadEmployeeReport(empNo, data?.name || empNo, range);
+      await downloadEmployeeReport(empNo, data?.name || empNo, range, period);
     } catch {
       window.alert("Couldn't generate the report-try again.");
     } finally {
       setDownloading(false);
     }
   };
+
+  const activePeriodLabel = period && periodsList?.find(p => p.key === period)?.label;
 
   const trend = (data?.days || [])
     .filter(d => d.code !== "R" && d.code !== "H")
@@ -61,12 +77,43 @@ export default function EmployeeDrawer({ empNo, onClose }) {
                 {[30, 90, 180, 365].map(r => (
                   <button
                     key={r}
-                    className={"chip" + (range === r ? " chip-active" : "")}
-                    onClick={() => setRange(r)}
+                    className={"chip" + (!period && range === r ? " chip-active" : "")}
+                    onClick={() => { setRange(r); setPeriod(null); }}
                   >
                     {r === 365 ? "1 year" : `${r}d`}
                   </button>
                 ))}
+                <div className="company-dropdown">
+                  <button
+                    type="button"
+                    className={"chip" + (period ? " chip-active" : "")}
+                    onClick={() => setPeriodMenuOpen(o => !o)}
+                  >
+                    {activePeriodLabel || "Pay period"}
+                  </button>
+                  {periodMenuOpen && (
+                    <div className="company-dropdown-menu" role="listbox">
+                      {periodsList === null && <div className="employee-search-status">Loading…</div>}
+                      {periodsList?.map(p => (
+                        <button
+                          key={p.key}
+                          type="button"
+                          role="option"
+                          aria-selected={period === p.key}
+                          className={"company-dropdown-item" + (period === p.key ? " is-selected" : "")}
+                          onClick={() => { setPeriod(p.key); setPeriodMenuOpen(false); }}
+                        >
+                          <span>
+                            <svg className="company-dropdown-check" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            {p.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <button className="btn-primary btn-small" onClick={handleDownload} disabled={downloading}>
                 {downloading ? "Generating…" : "Download PDF"}
@@ -97,6 +144,7 @@ export default function EmployeeDrawer({ empNo, onClose }) {
                 <p className="hint">
                   Total hours between clock-in and clock-out on days actually worked - figures below are in hours.
                   Rest days, holidays, leave, and missing punches aren't counted (there's no in/out to measure).
+                  {period && " Weeks here are fixed 7-day chunks counted from the 19th (the start of the pay period), not calendar weeks."}
                 </p>
                 <div className="table-scroll" style={{ maxHeight: 220, marginBottom: 20 }}>
                   <table className="data-table">

@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { getCompanies, searchEmployees } from "../api";
+import { getCompanies, getPeriods, searchEmployees } from "../api";
 import { useRange } from "../context/RangeContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -212,9 +212,80 @@ function CompanyDropdown({ companies, value, onChange }) {
   );
 }
 
+// Alternative to the day-count chips: pick one of the company's own
+// 19th-18th pay periods instead of a rolling day-count window. Loads the
+// list lazily (only once opened) since it rarely changes and every page
+// that cares about `period` already gets it from RangeContext -- this
+// dropdown is just the one place that sets it.
+function PeriodPicker({ period, onSelect }) {
+  const [open, setOpen] = useState(false);
+  const [periodsList, setPeriodsList] = useState(null);
+  const rootRef = useRef(null);
+
+  useEffect(() => {
+    if (open && periodsList === null) {
+      getPeriods().then(setPeriodsList).catch(() => setPeriodsList([]));
+    }
+  }, [open, periodsList]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e) => {
+      if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false);
+    };
+    const handleKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [open]);
+
+  const activeLabel = period && periodsList?.find(p => p.key === period)?.label;
+
+  return (
+    <div className="company-dropdown" ref={rootRef}>
+      <button
+        type="button"
+        className={"chip" + (period ? " chip-active" : "")}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen(o => !o)}
+      >
+        {activeLabel || "Pay period"}
+      </button>
+
+      {open && (
+        <div className="company-dropdown-menu" role="listbox">
+          {periodsList === null && <div className="employee-search-status">Loading…</div>}
+          {periodsList?.length === 0 && <div className="employee-search-status">No periods available</div>}
+          {periodsList?.map(p => (
+            <button
+              key={p.key}
+              type="button"
+              role="option"
+              aria-selected={period === p.key}
+              className={"company-dropdown-item" + (period === p.key ? " is-selected" : "")}
+              onClick={() => { onSelect(p.key); setOpen(false); }}
+            >
+              <span>
+                <svg className="company-dropdown-check" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {p.label}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Navbar({ onSelectEmployee }) {
   const location = useLocation();
-  const { days, setDays, company, setCompany } = useRange();
+  const { days, setDays, company, setCompany, period, setPeriod } = useRange();
   const { isAdmin, isHod, me, logout } = useAuth();
   const [companies, setCompanies] = useState([]);
 
@@ -254,12 +325,16 @@ export default function Navbar({ onSelectEmployee }) {
             {[30, 90, 180, 365].map(r => (
               <button
                 key={r}
-                className={"chip" + (days === r ? " chip-active" : "")}
+                // Not just `days === r` -- a chip should only read as
+                // active when day-count mode is actually the one driving
+                // the page (i.e. no period is currently selected).
+                className={"chip" + (!period && days === r ? " chip-active" : "")}
                 onClick={() => setDays(r)}
               >
                 {r === 365 ? "1 year" : `${r}d`}
               </button>
             ))}
+            <PeriodPicker period={period} onSelect={setPeriod} />
           </div>
         )}
       </div>

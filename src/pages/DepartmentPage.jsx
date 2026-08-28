@@ -8,7 +8,7 @@ import { useRange } from "../context/RangeContext";
 export default function DepartmentPage() {
   const { dept } = useParams();
   const [data, setData] = useState(null);
-  const { days, company: contextCompany } = useRange();
+  const { days, company: contextCompany, period } = useRange();
   const [searchParams] = useSearchParams();
   // The URL's own ?company= -- set by whichever list linked here (the
   // sidebar's "My departments" for managers/HODs, or the dept bar chart
@@ -31,7 +31,7 @@ export default function DepartmentPage() {
   const handleDownload = async () => {
     setDownloading(true);
     try {
-      await downloadDepartmentReport(dept, days, company || null);
+      await downloadDepartmentReport(dept, days, company || null, period);
     } catch {
       window.alert("Couldn't generate the report - try again.");
     } finally {
@@ -41,8 +41,8 @@ export default function DepartmentPage() {
 
   useEffect(() => {
     setError(null);
-    getDepartment(dept, days, company || null).then(setData).catch(err => setError(err));
-  }, [dept, days, company]);
+    getDepartment(dept, days, company || null, period).then(setData).catch(err => setError(err));
+  }, [dept, days, company, period]);
 
   const employees = useMemo(() => {
     if (!data) return [];
@@ -94,7 +94,7 @@ export default function DepartmentPage() {
       <div className="page-header">
         <div>
           <h1>{dept}</h1>
-          <p className="page-sub">{company ? `${company} · ` : ""}{kpis.employees} employees · last {days} days</p>
+          <p className="page-sub">{company ? `${company} · ` : ""}{kpis.employees} employees · {data.windowLabel || `last ${days} days`}</p>
         </div>
         <div className="header-actions">
           <button className="btn-primary" onClick={handleDownload} disabled={downloading}>

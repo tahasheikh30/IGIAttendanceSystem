@@ -13,12 +13,12 @@ const METRIC_COLORS = { "Late %": "#D85A30", "Early leave %": "#D4537E", "Late h
 
 export default function AnalyticsPage() {
   const [data, setData] = useState(null);
-  const { days, company } = useRange();
+  const { days, company, period } = useRange();
   const { isAdmin, isHod } = useAuth();
   const [exporting, setExporting] = useState(false);
   const chartsRef = useRef(null);
 
-  useEffect(() => { getAnalytics(days, company || null).then(setData); }, [days, company]);
+  useEffect(() => { getAnalytics(days, company || null, period).then(setData); }, [days, company, period]);
 
   const handleDownloadCharts = async () => {
     if (!chartsRef.current) return;
@@ -34,7 +34,7 @@ export default function AnalyticsPage() {
       });
       const a = document.createElement("a");
       a.href = dataUrl;
-      a.download = `attendance_analytics_${days}d.png`;
+      a.download = `attendance_analytics_${period || `${days}d`}.png`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -61,7 +61,7 @@ export default function AnalyticsPage() {
               : isHod
                 ? (company ? `${company} · ` : "Your companies · ")
                 : "Your departments · "}
-            deeper patterns across the last {days} days
+            deeper patterns across {data.windowLabel ? data.windowLabel : `the last ${days} days`}
           </p>
         </div>
         <div className="header-actions">
