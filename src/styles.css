@@ -120,8 +120,9 @@ body {
 h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .page-sub { font-size: 13px; color: var(--text-secondary); margin: 4px 0 0; }
 
-.header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.range-toggle { display: flex; gap: 6px; }
+.header-actions { display: flex; align-items: flex-start; gap: 12px; flex-wrap: nowrap; }
+.range-toggle { display: flex; flex-wrap: wrap; gap: 6px; flex: 1 1 auto; min-width: 0; }
+.header-actions > .btn-primary { flex-shrink: 0; }
 
 .btn-primary {
   display: inline-flex; align-items: center; gap: 6px;
