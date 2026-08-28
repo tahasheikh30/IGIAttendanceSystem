@@ -121,7 +121,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .page-sub { font-size: 13px; color: var(--text-secondary); margin: 4px 0 0; }
 
 .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.range-toggle { display: flex; gap: 6px; align-items: center; }
+.range-toggle { display: flex; gap: 6px; }
 
 .btn-primary {
   display: inline-flex; align-items: center; gap: 6px;
@@ -139,8 +139,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   border: 1px solid var(--border); background: var(--surface);
   border-radius: 999px; padding: 5px 12px; font-size: 12.5px; color: var(--text-secondary);
   cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
   transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
 }
 .chip:hover { border-color: var(--accent); background: var(--accent-light); color: var(--accent-dark); }
@@ -157,7 +155,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .navbar {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 28px;
   width: 100%;
   height: var(--navbar-h);
   flex-shrink: 0;
@@ -186,26 +184,13 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   display: flex;
   align-items: center;
   gap: 12px;
-  /* This is the ONLY part of the navbar allowed to give up space: it
-     takes whatever room is left after the brand and the right-hand
-     group (search/profile/sign out) take their fixed natural width
-     (flex: 1 1 0 + min-width: 0, rather than flex-wrap on the whole
-     navbar). If the company dropdown + chips still don't fit in that
-     leftover space, this row scrolls horizontally on its own instead
-     of pushing anything else around -- brand and the right-hand group
-     never move, at any viewport width. */
-  flex: 1 1 0;
-  min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: thin;
 }
-.navbar-controls::-webkit-scrollbar { height: 5px; }
-.navbar-controls::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
 
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 16px;
+  margin-left: auto;
   flex-shrink: 0;
 }
 
@@ -261,6 +246,31 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   background: var(--danger-light);
 }
 
+@media (max-width: 1300px) {
+  /* Selecting a company (up to 200px label) *and* a pay period (which
+     swaps the "Pay period" chip for a full date-range label) at the same
+     time can push the row's min-content width past the viewport, since
+     navbar-brand/navbar-right/employee-search/navbar-profile are all
+     flex-shrink: 0 and nothing else in the row is allowed to wrap. That
+     overflow -- combined with .navbar's position: sticky -- is what was
+     corrupting the layout (clipped Sign out button, broken sticky
+     rendering). Give the controls their own row before that point is
+     reached, without pulling in the more aggressive phone-only rules
+     below (hidden profile info, icon-only sign out, etc). */
+  .navbar {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    height: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .navbar-controls {
+    order: 3;
+    flex-basis: 100%;
+    width: 100%;
+  }
+}
+
 @media (max-width: 860px) {
   /* The navbar now wraps to a second row for the company dropdown and
      period chips instead of a fixed single-row height, since squeezing
@@ -287,7 +297,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   }
   .range-toggle { flex-wrap: wrap; }
   .chip { padding: 5px 10px; font-size: 12px; }
-  .chip-period { max-width: 110px; }
 
   .company-dropdown { width: 100%; }
   .company-dropdown-trigger { width: 100%; justify-content: flex-start; }
@@ -310,7 +319,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   .navbar-signout { padding: 8px; border-radius: 50%; }
   .signout-label { display: none; }
   .navbar-avatar { width: 30px; height: 30px; }
-  .chip-period { max-width: 88px; }
 }
 
 /* ---------- User management ---------- */
@@ -495,11 +503,11 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .company-dropdown-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 5px 8px 5px 5px;
+  padding: 5px 10px 5px 6px;
   box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
   font: inherit;
   color: var(--text);
@@ -515,9 +523,9 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   box-shadow: 0 0 0 3px var(--accent-light);
 }
 .company-select-badge {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -528,7 +536,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .company-dropdown-label {
   font-size: 13px;
   font-weight: 600;
-  max-width: 130px;
+  max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
