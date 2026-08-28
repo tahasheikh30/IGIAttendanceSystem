@@ -3,20 +3,34 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { getEmployee, downloadEmployeeReport, getPeriods } from "../api";
 import StatCard from "./StatCard";
 import CalendarStrip, { CodeLegend } from "./CalendarStrip";
+import { useRange } from "../context/RangeContext";
 
 export default function EmployeeDrawer({ empNo, onClose }) {
+  const { period: globalPeriod } = useRange();
   const [data, setData] = useState(null);
   const [range, setRange] = useState(30);
-  // The drawer keeps its own window state (like `range` above) rather than
-  // sharing RangeContext's `period` -- someone drilling into one employee
-  // may well want a different pay period than whatever's selected on the
-  // page behind it. Picking a period here clears `range`'s "active" chip
-  // the same way RangeContext does at the page level.
-  const [period, setPeriod] = useState(null);
+  // The drawer's own window starts in sync with whatever period is
+  // selected in the navbar (RangeContext's `period`), so opening the
+  // drawer shows the same window as the page behind it. From there,
+  // picking a different period (or a day-count chip) *inside* the
+  // drawer only overrides the view for this one employee -- it's local
+  // state, so it never writes back into RangeContext and never affects
+  // the navbar or any other page. If the navbar's period changes while
+  // the drawer is open, that's still picked up (see the effect below),
+  // since that's a page-level change made on purpose, not a stale value.
+  const [period, setPeriod] = useState(globalPeriod);
   const [periodsList, setPeriodsList] = useState(null);
   const [periodMenuOpen, setPeriodMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
+
+  // Follow the navbar's period selection whenever it changes. This only
+  // pulls the global value in -- it never pushes the drawer's local
+  // period back out, so a per-employee override made below never leaks
+  // to the navbar or other pages.
+  useEffect(() => {
+    setPeriod(globalPeriod);
+  }, [globalPeriod]);
 
   useEffect(() => {
     setLoading(true);
