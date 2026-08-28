@@ -656,32 +656,16 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .leadership-blurb { font-size: 11.5px; color: var(--text-muted); margin-top: 7px; line-height: 1.45; }
 
 /* ---------- Packages Group section ---------- */
-.group-section {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 26px;
-  align-items: center;
-}
-.group-copy .hint { margin-bottom: 16px; }
-.group-chip-list { display: flex; flex-wrap: wrap; gap: 8px; }
-.group-chip {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface-muted);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-.group-chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .group-banner-wrap {
   position: relative;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 10px 28px rgba(18, 34, 47, 0.16);
+  margin-bottom: 22px;
 }
-.group-banner { width: 100%; display: block; }
+.group-banner-wrap-wide { max-height: 220px; }
+.group-banner { width: 100%; display: block; object-fit: cover; }
+.group-banner-wrap-wide .group-banner { max-height: 220px; object-fit: cover; }
 .group-banner-caption {
   position: absolute; left: 0; right: 0; bottom: 0;
   padding: 14px 16px 12px;
@@ -691,11 +675,73 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   letter-spacing: 0.03em;
 }
 
+.group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+.group-company-card {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px 16px;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.group-company-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.company-tag {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.group-company-name { font-weight: 600; font-size: 13.5px; }
+.group-company-blurb { font-size: 11.5px; color: var(--text-muted); margin: 5px 0 0; line-height: 1.5; }
+
+/* ---------- Core values section ---------- */
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-top: 4px;
+}
+.value-card {
+  text-align: center;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 14px;
+}
+.value-icon {
+  width: 42px; height: 42px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  font-weight: 700;
+  font-size: 17px;
+}
+.value-name { font-weight: 600; font-size: 13.5px; }
+.value-blurb { font-size: 11.5px; color: var(--text-muted); margin: 6px 0 0; line-height: 1.5; }
+
+.mission-quote {
+  margin: 20px 0 0;
+  padding: 16px 20px;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-light);
+  border-radius: 0 10px 10px 0;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--accent-dark);
+  line-height: 1.6;
+}
+
 @media (max-width: 640px) {
   .tribute-card { flex-direction: column; align-items: flex-start; }
-}
-@media (max-width: 760px) {
-  .group-section { grid-template-columns: 1fr; }
 }
 
 /* ---------- Analytics page ---------- */

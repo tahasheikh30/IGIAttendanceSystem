@@ -38,13 +38,106 @@ const LEADERSHIP = [
   },
 ];
 
-// Businesses operating under the wider Packages Group umbrella.
+// The wider Packages Group companies IGI Holdings sits alongside. IGI's own
+// entities (Insurance, Life, Securities) are already covered in the
+// leadership grid above, so this list is the rest of the group.
 const GROUP_COMPANIES = [
-  { name: "IGI Insurance", color: "var(--accent)" },
-  { name: "IGI Investments", color: "var(--success)" },
-  { name: "IGI Securities", color: "var(--warn)" },
-  { name: "IGI FSI", color: "var(--danger)" },
-  { name: "IGI Life", color: "var(--accent-dark)" },
+  {
+    name: "Packages Limited",
+    sector: "Packaging & Paper",
+    color: "var(--accent)",
+    blurb: "The group's founding company, started in 1956 as a joint venture with Sweden's Akerlund & Rausing; grew from a single carton unit into one of Pakistan's largest conglomerates.",
+  },
+  {
+    name: "Packages Convertors Limited",
+    sector: "Packaging & Paper",
+    color: "var(--accent)",
+    blurb: "A leading Pakistani packaging solutions provider, producing packaging materials and tissue products.",
+  },
+  {
+    name: "Bulleh Shah Packaging",
+    sector: "Packaging & Paper",
+    color: "var(--accent)",
+    blurb: "Produces paper & board and corrugated packaging, with a focus on responsible packaging for local brands.",
+  },
+  {
+    name: "Packages Lanka",
+    sector: "Packaging & Paper",
+    color: "var(--accent)",
+    blurb: "A Sri Lanka-based joint venture near Colombo, and the country's leading flexible packaging manufacturer.",
+  },
+  {
+    name: "Chantler Packages",
+    sector: "Packaging & Paper",
+    color: "var(--accent)",
+    blurb: "A flexible packaging manufacturer in Mississauga, Canada, serving the food industry.",
+  },
+  {
+    name: "Tri-Pack Films Limited",
+    sector: "Films & Materials",
+    color: "var(--warn)",
+    blurb: "Pakistan's top manufacturer of BOPP and CPP packaging films.",
+  },
+  {
+    name: "DIC Pakistan",
+    sector: "Films & Materials",
+    color: "var(--warn)",
+    blurb: "Pakistan's largest printing ink manufacturer, a joint venture with Japan's DIC Asia Pacific.",
+  },
+  {
+    name: "OmyaPack",
+    sector: "Films & Materials",
+    color: "var(--warn)",
+    blurb: "Producer of industrial minerals and specialty chemicals, a joint venture with Switzerland's Omya.",
+  },
+  {
+    name: "StarchPack",
+    sector: "Films & Materials",
+    color: "var(--warn)",
+    blurb: "A Kasur-based facility producing corn-derived starches used across food, paper and pharma industries.",
+  },
+  {
+    name: "Hoechst Pakistan Limited",
+    sector: "Pharmaceuticals",
+    color: "var(--success)",
+    blurb: "A pharmaceutical company with a 55+ year legacy of improving healthcare in Pakistan.",
+  },
+  {
+    name: "Packages Mall",
+    sector: "Real Estate & Trading",
+    color: "var(--danger)",
+    blurb: "A large Lahore shopping mall with retail, dining and cinema outlets, built on Packages' own site.",
+  },
+  {
+    name: "Packages Trading FZCO",
+    sector: "Real Estate & Trading",
+    color: "var(--danger)",
+    blurb: "Packages Limited's first UAE subsidiary, handling import, export, distribution and warehousing.",
+  },
+];
+
+// The group's five core values, as published in its Code of Conduct.
+const CORE_VALUES = [
+  {
+    name: "Care",
+    blurb: "Fairness and consideration run through everything the group does.",
+  },
+  {
+    name: "Respect",
+    blurb: "Everyone is treated with respect and dignity.",
+  },
+  {
+    name: "Lead",
+    blurb: "Aspiring to lead in everything the group takes on.",
+  },
+  {
+    name: "Honesty",
+    blurb: "Truthfulness, integrity and trust underpin every activity.",
+  },
+  {
+    name: "Courage",
+    blurb: "The willingness to speak up and make bold, principled decisions.",
+  },
 ];
 
 function initials(name) {
@@ -85,6 +178,26 @@ function LeadershipCard({ name, role, tag, tagColor, blurb, img }) {
         <div className="leadership-role">{role}</div>
         {blurb && <p className="leadership-blurb">{blurb}</p>}
       </div>
+    </div>
+  );
+}
+
+function GroupCompanyCard({ name, sector, color, blurb }) {
+  return (
+    <div className="group-company-card">
+      <span className="company-tag" style={{ background: color }}>{sector}</span>
+      <div className="group-company-name">{name}</div>
+      <p className="group-company-blurb">{blurb}</p>
+    </div>
+  );
+}
+
+function ValueCard({ name, blurb }) {
+  return (
+    <div className="value-card">
+      <div className="value-icon">{name[0]}</div>
+      <div className="value-name">{name}</div>
+      <p className="value-blurb">{blurb}</p>
     </div>
   );
 }
@@ -140,10 +253,7 @@ export default function AboutPage() {
               under a shared standard of governance and service.
             </p>
           </div>
-          <div className="leadership-stat">
-            <div className="leadership-stat-num">{LEADERSHIP.length}</div>
-            <div className="leadership-stat-label">Leaders shown</div>
-          </div>
+          
         </div>
         <div className="leadership-grid">
           {LEADERSHIP.map(p => (
@@ -161,33 +271,61 @@ export default function AboutPage() {
       </div>
 
       <div className="card">
-        <div className="section-label">Part of Packages Group</div>
-        <div className="group-section">
-          <div className="group-copy">
+        <div className="leadership-intro">
+          <div>
+            <div className="section-label">Part of Packages Group</div>
             <p className="hint">
-              IGI Holdings and its subsidiaries operate under the Packages Group
-              umbrella - a diversified group with roots in manufacturing that has
-              grown into financial services, food, and paper packaging, built on
-              the same founding principles of discipline and integrity.
+              IGI Holdings operates alongside {GROUP_COMPANIES.length} sister
+              companies under the Packages Group umbrella - spanning packaging
+              and paper, films and industrial materials, pharmaceuticals, and
+              real estate, all built on the same founding principles of
+              discipline and integrity.
             </p>
-            <div className="group-chip-list">
-              {GROUP_COMPANIES.map(c => (
-                <span className="group-chip" key={c.name}>
-                  <span className="group-chip-dot" style={{ background: c.color }} />
-                  {c.name}
-                </span>
-              ))}
-            </div>
           </div>
-          <div className="group-banner-wrap">
-            <img
-              src="/assets/packages-about.jpg"
-              alt="Packages Group companies"
-              className="group-banner"
-            />
-            <div className="group-banner-caption">Packages Group companies</div>
+          <div className="leadership-stat">
+            <div className="leadership-stat-num">{GROUP_COMPANIES.length}</div>
+            <div className="leadership-stat-label">Sister companies</div>
           </div>
         </div>
+
+        <div className="group-banner-wrap group-banner-wrap-wide">
+          <img
+            src="/assets/packages-about.jpg"
+            alt="Packages Group companies"
+            className="group-banner"
+          />
+          <div className="group-banner-caption">Packages Group companies</div>
+        </div>
+
+        <div className="group-grid">
+          {GROUP_COMPANIES.map(c => (
+            <GroupCompanyCard
+              key={c.name}
+              name={c.name}
+              sector={c.sector}
+              color={c.color}
+              blurb={c.blurb}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="section-label">Our Core Values</div>
+        <p className="hint">
+          Values the group holds higher than self-interest, and expects of
+          every company, employee and partner acting under its name.
+        </p>
+        <div className="value-grid">
+          {CORE_VALUES.map(v => (
+            <ValueCard key={v.name} name={v.name} blurb={v.blurb} />
+          ))}
+        </div>
+        <p className="mission-quote">
+          Packages Group's mission is to raise the everyday quality of life
+          and build sustainability on the triple bottom line of people,
+          planet and prosperity.
+        </p>
       </div>
     </div>
   );
