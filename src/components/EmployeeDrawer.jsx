@@ -100,7 +100,7 @@ export default function EmployeeDrawer({ empNo, onClose }) {
                 <div className="company-dropdown">
                   <button
                     type="button"
-                    className={"chip" + (period ? " chip-active" : "")}
+                    className={"chip chip-period" + (period ? " chip-active" : "")}
                     onClick={() => setPeriodMenuOpen(o => !o)}
                   >
                     {activePeriodLabel || "Pay period"}
