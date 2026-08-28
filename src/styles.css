@@ -181,11 +181,18 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   flex-wrap: wrap;
 }
 
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .navbar-profile {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-left: auto;
   padding-left: 18px;
   border-left: 1px solid var(--border);
   flex-shrink: 0;
@@ -263,6 +270,13 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   .company-dropdown { width: 100%; }
   .company-dropdown-trigger { width: 100%; justify-content: flex-start; }
   .company-dropdown-label { max-width: none; flex: 1; }
+
+  /* navbar-right only exists to sit search + profile together on the
+     right at desktop widths. At this breakpoint the two need to land in
+     different rows (profile stays with the brand, search gets its own
+     full-width row via the existing order:-1 rule below), so the wrapper
+     is unwrapped here and its children rejoin .navbar's own flex-wrap. */
+  .navbar-right { display: contents; }
 
   .navbar-profile { margin-left: auto; padding-left: 10px; }
   .navbar-profile-info { display: none; }
