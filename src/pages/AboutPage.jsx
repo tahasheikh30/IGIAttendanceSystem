@@ -267,10 +267,7 @@ export default function AboutPage() {
               discipline and integrity.
             </p>
           </div>
-          <div className="leadership-stat">
-            <div className="leadership-stat-num">{GROUP_COMPANIES.length}</div>
-            <div className="leadership-stat-label">Sister companies</div>
-          </div>
+          
         </div>
 
         <div className="group-banner-wrap group-banner-wrap-wide">
