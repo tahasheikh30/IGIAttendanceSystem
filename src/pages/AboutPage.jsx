@@ -7,32 +7,24 @@ const LEADERSHIP = [
   {
     name: "Faisal Khan",
     role: "CEO, IGI General Insurance",
-    tag: "General Insurance",
-    tagColor: "var(--accent)",
     blurb: "Property, motor, marine and other non-life cover for individuals and businesses.",
     img: "/assets/faisal-khan.jpg",
   },
   {
     name: "Ali Nadeem",
     role: "CEO, IGI Life",
-    tag: "Life Insurance",
-    tagColor: "var(--success)",
     blurb: "Life and health protection, savings and retirement plans.",
     img: "/assets/ali-nadeem.jpg",
   },
   {
     name: "Raza Hussain Rizvi",
     role: "CEO, IGI Securities",
-    tag: "Securities",
-    tagColor: "var(--warn)",
     blurb: "Brokerage and equity market access for retail and institutional clients.",
     img: "/assets/raza-hussain-rizvi.jpg",
   },
   {
     name: "Hadia Tariq",
     role: "HOD, Human Resources",
-    tag: "Human Resources",
-    tagColor: "var(--accent-dark)",
     blurb: "People, culture and talent across every IGI Holdings company.",
     img: "/assets/hadia-tariq.jpg",
   },
@@ -156,7 +148,7 @@ function initials(name) {
 // Renders the given photo; if it's missing or fails to load (no file yet
 // placed under /public/assets), falls back to an initials avatar instead
 // of a broken image icon.
-function LeadershipCard({ name, role, tag, tagColor, blurb, img }) {
+function LeadershipCard({ name, role, blurb, img }) {
   const [imgFailed, setImgFailed] = useState(false);
   const showPhoto = img && !imgFailed;
 
@@ -172,11 +164,6 @@ function LeadershipCard({ name, role, tag, tagColor, blurb, img }) {
           />
         ) : (
           <div className="leadership-avatar">{initials(name)}</div>
-        )}
-        {tag && (
-          <span className="leadership-tag" style={{ background: tagColor || "var(--accent)" }}>
-            {tag}
-          </span>
         )}
       </div>
       <div className="leadership-body">
@@ -261,8 +248,6 @@ export default function AboutPage() {
               key={p.name}
               name={p.name}
               role={p.role}
-              tag={p.tag}
-              tagColor={p.tagColor}
               blurb={p.blurb}
               img={p.img}
             />
