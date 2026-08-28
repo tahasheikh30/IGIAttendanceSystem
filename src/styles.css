@@ -126,10 +126,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   flex-wrap: nowrap;
   gap: 5px;
   min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-.range-toggle::-webkit-scrollbar { display: none; }
 .header-actions > .btn-primary { flex-shrink: 0; }
 
 .btn-primary {
