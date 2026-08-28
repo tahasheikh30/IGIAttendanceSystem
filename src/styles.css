@@ -156,14 +156,16 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 /* ---------- Navbar ---------- */
 .navbar {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 10px;
   align-items: center;
   gap: 28px;
   width: 100%;
-  height: var(--navbar-h);
+  min-height: var(--navbar-h);
   flex-shrink: 0;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
-  padding: 0 28px;
+  padding: 10px 28px;
   position: sticky;
   top: 0;
   z-index: 30;
@@ -186,6 +188,18 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   display: flex;
   align-items: center;
   gap: 12px;
+  /* flex-shrink: 0 means this group is never compressed -- if it doesn't
+     fit next to the brand and the right-hand group on one row, it wraps
+     to its own full-width row (flex-grow: 1) instead of squeezing (which
+     wrapped "1 year" onto two lines) or overflowing past the edge (which
+     pushed Sign out off the navbar). This works at any viewport width,
+     not just below a hardcoded breakpoint. DOM order (brand, controls,
+     right) already puts it in the right visual position, so no explicit
+     `order` is needed here -- and adding one would fight the `order: -1`
+     trick .employee-search relies on inside the ≤860px breakpoint below. */
+  flex-shrink: 0;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .navbar-right {
@@ -246,31 +260,6 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   border-color: var(--danger);
   color: var(--danger);
   background: var(--danger-light);
-}
-
-@media (max-width: 1300px) {
-  /* Selecting a company (up to 200px label) *and* a pay period (which
-     swaps the "Pay period" chip for a full date-range label) at the same
-     time can push the row's min-content width past the viewport, since
-     navbar-brand/navbar-right/employee-search/navbar-profile are all
-     flex-shrink: 0 and nothing else in the row is allowed to wrap. That
-     overflow -- combined with .navbar's position: sticky -- is what was
-     corrupting the layout (clipped Sign out button, broken sticky
-     rendering). Give the controls their own row before that point is
-     reached, without pulling in the more aggressive phone-only rules
-     below (hidden profile info, icon-only sign out, etc). */
-  .navbar {
-    flex-wrap: wrap;
-    row-gap: 8px;
-    height: auto;
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  .navbar-controls {
-    order: 3;
-    flex-basis: 100%;
-    width: 100%;
-  }
 }
 
 @media (max-width: 860px) {
