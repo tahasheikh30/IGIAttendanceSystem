@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import { getCompanies } from "../api";
+import { getCompanies, searchEmployees } from "../api";
 import { useRange } from "../context/RangeContext";
 import { useAuth } from "../context/AuthContext";
 
@@ -17,6 +17,107 @@ function initialsFor(name) {
   const first = parts[0]?.[0] || "";
   const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
   return (first + last).toUpperCase();
+}
+
+// Cross-department employee lookup by name or ID -- deliberately separate
+// from the company dropdown/period chips above, since it isn't scoped to
+// whatever company is currently selected: it searches every department the
+// logged-in user can see (the backend enforces that scoping), so a manager
+// or HOD can jump straight to one person without knowing which department
+// they're in first.
+function EmployeeSearch({ onSelect }) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errored, setErrored] = useState(false);
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+
+  useEffect(() => {
+    const q = query.trim();
+    if (q.length < 2) {
+      setResults([]);
+      setLoading(false);
+      setErrored(false);
+      return;
+    }
+    setLoading(true);
+    setErrored(false);
+    const handle = setTimeout(() => {
+      searchEmployees(q)
+        .then(setResults)
+        .catch(() => setErrored(true))
+        .finally(() => setLoading(false));
+    }, 250); // debounce -- avoid firing a request on every keystroke
+    return () => clearTimeout(handle);
+  }, [query]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e) => {
+      if (rootRef.current && !rootRef.current.contains(e.target)) setOpen(false);
+    };
+    const handleKey = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [open]);
+
+  const pick = (r) => {
+    onSelect(r.empNo);
+    setQuery("");
+    setResults([]);
+    setOpen(false);
+  };
+
+  const showMenu = open && query.trim().length >= 2;
+
+  return (
+    <div className="employee-search" ref={rootRef}>
+      <div className="employee-search-box">
+        <svg className="employee-search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="7" cy="7" r="5.25" stroke="currentColor" strokeWidth="1.4" />
+          <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        </svg>
+        <input
+          className="employee-search-input"
+          placeholder="Search employee by name or ID"
+          value={query}
+          onChange={e => { setQuery(e.target.value); setOpen(true); }}
+          onFocus={() => { if (query.trim().length >= 2) setOpen(true); }}
+        />
+      </div>
+
+      {showMenu && (
+        <div className="employee-search-menu" role="listbox">
+          {loading && <div className="employee-search-status">Searching…</div>}
+          {!loading && errored && <div className="employee-search-status">Couldn't search - try again.</div>}
+          {!loading && !errored && results.length === 0 && (
+            <div className="employee-search-status">No employees match "{query.trim()}"</div>
+          )}
+          {!loading && !errored && results.map(r => (
+            <button
+              type="button"
+              key={r.empNo}
+              role="option"
+              className="employee-search-item"
+              onClick={() => pick(r)}
+            >
+              <span className="employee-search-name">{r.name}</span>
+              <span className="employee-search-meta">
+                {r.dept}{r.company ? ` · ${r.company}` : ""} · ID {r.empNo}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 // A real <select>'s open dropdown list is drawn by the browser/OS, not by
@@ -111,7 +212,7 @@ function CompanyDropdown({ companies, value, onChange }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ onSelectEmployee }) {
   const location = useLocation();
   const { days, setDays, company, setCompany } = useRange();
   const { isAdmin, isHod, me, logout } = useAuth();
@@ -145,6 +246,7 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-controls">
+        <EmployeeSearch onSelect={onSelectEmployee} />
         {showCompanyDropdown && (
           <CompanyDropdown companies={companies} value={company} onChange={setCompany} />
         )}

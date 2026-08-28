@@ -59,6 +59,10 @@ export const getDepartment = (dept, days = 30, company = null) => {
 };
 export const getEmployee = (empNo, days = 365) =>
   api.get(`/employees/${encodeURIComponent(empNo)}?days=${days}`).then(r => r.data);
+// Cross-department employee lookup by name or ID, for the navbar search --
+// scoped server-side to whatever the logged-in user is allowed to see.
+export const searchEmployees = (q) =>
+  api.get(`/employees/search?q=${encodeURIComponent(q)}`).then(r => r.data);
 export const getAnalytics = (days = 90, company = null) => {
   const q = company ? `?days=${days}&company=${encodeURIComponent(company)}` : `?days=${days}`;
   return api.get(`/analytics${q}`).then(r => r.data);

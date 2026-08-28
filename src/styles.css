@@ -383,6 +383,76 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
    CSS, so it can never pick up the app's styling. This is a custom
    button + floating menu instead, built entirely with our own markup, so
    every pixel of it -- open or closed -- is actually themeable. */
+/* ---------- Navbar employee search ---------- */
+.employee-search { position: relative; width: 240px; flex-shrink: 0; }
+.employee-search-box {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.employee-search-box:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+.employee-search-icon { color: var(--text-muted); flex-shrink: 0; }
+.employee-search-input {
+  border: none;
+  outline: none;
+  background: none;
+  font: inherit;
+  font-size: 13px;
+  color: var(--text);
+  width: 100%;
+}
+.employee-search-input::placeholder { color: var(--text-muted); }
+
+.employee-search-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: max-content;
+  min-width: 100%;
+  max-width: 360px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 16px 32px rgba(16, 24, 40, 0.14), 0 2px 6px rgba(16, 24, 40, 0.06);
+  padding: 6px;
+  z-index: 41;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.employee-search-status { padding: 10px 10px; font-size: 12.5px; color: var(--text-muted); }
+.employee-search-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+.employee-search-item:hover { background: var(--surface-muted); }
+.employee-search-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.employee-search-meta { font-size: 11.5px; color: var(--text-muted); }
+
+@media (max-width: 860px) {
+  .employee-search { width: 100%; order: -1; }
+}
+@media (max-width: 480px) {
+  .employee-search-menu { min-width: 0; width: 100%; max-width: none; }
+}
+
 .company-dropdown { position: relative; }
 
 .company-dropdown-trigger {

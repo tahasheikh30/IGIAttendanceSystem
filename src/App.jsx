@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
@@ -8,16 +9,23 @@ import AboutPage from "./pages/AboutPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import LoginPage from "./pages/LoginPage";
 import UsersPage from "./pages/UsersPage";
+import EmployeeDrawer from "./components/EmployeeDrawer";
 import { RangeProvider } from "./context/RangeContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
 function AuthedApp() {
   const { isAdmin } = useAuth();
+  // Owned here rather than inside a page component: the navbar search can
+  // find an employee in any department from any page, so the drawer it
+  // opens has to live above the routed page content instead of belonging
+  // to whichever page happens to be showing (Overview/DepartmentPage each
+  // still keep their own separate drawer state for clicking a row directly).
+  const [searchEmp, setSearchEmp] = useState(null);
   return (
     <RangeProvider>
       <div className="app-shell">
         <div className="brand-strip" />
-        <Navbar />
+        <Navbar onSelectEmployee={setSearchEmp} />
         <div className="app-body">
           <Sidebar />
           <main className="main-content">
@@ -32,6 +40,7 @@ function AuthedApp() {
             </Routes>
           </main>
         </div>
+        {searchEmp && <EmployeeDrawer empNo={searchEmp} onClose={() => setSearchEmp(null)} />}
       </div>
     </RangeProvider>
   );
