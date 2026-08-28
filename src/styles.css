@@ -297,6 +297,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   }
   .range-toggle { flex-wrap: wrap; }
   .chip { padding: 5px 10px; font-size: 12px; }
+  .chip-period { max-width: 110px; }
 
   .company-dropdown { width: 100%; }
   .company-dropdown-trigger { width: 100%; justify-content: flex-start; }
@@ -319,6 +320,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   .navbar-signout { padding: 8px; border-radius: 50%; }
   .signout-label { display: none; }
   .navbar-avatar { width: 30px; height: 30px; }
+  .chip-period { max-width: 88px; }
 }
 
 /* ---------- User management ---------- */
