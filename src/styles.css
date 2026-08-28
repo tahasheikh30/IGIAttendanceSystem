@@ -187,23 +187,25 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   gap: 12px;
   /* Claims exactly the space left between the brand and .navbar-right,
      and never more -- so a long company name or a wide pay-period date
-     range grows/scrolls *inside* this lane instead of pushing the
-     search box, profile, and sign-out button (which stay pinned via
-     .navbar-right's margin-left: auto) further right or squeezing them.
-     min-width: 0 is required for a flex item to actually shrink below
-     its content's natural width -- the flex default is `auto`, which
-     otherwise floors it there and lets this lane force the row wider
-     than the container. overflow-x lets the lane itself scroll
-     horizontally on its own in the rare case its content still doesn't
-     fit, rather than shrinking the chips inside it or wrapping their
-     text. The mobile/tablet breakpoints below override flex-basis to
-     100% once this moves to its own row, where none of this applies. */
+     range grows *inside* this lane instead of pushing the search box,
+     profile, and sign-out button (which stay pinned via .navbar-right's
+     margin-left: auto) further right. min-width: 0 is required for a
+     flex item to actually shrink below its content's natural width --
+     the flex default is `auto`, which otherwise floors it there and
+     lets this lane force the row wider than the container.
+     NOTE: deliberately no overflow-x here. This container holds the
+     company dropdown and pay-period picker, whose open menus are
+     absolutely-positioned descendants that pop out below/past this
+     box's edge -- any overflow value other than visible (including
+     auto) clips them, which breaks both dropdowns outright rather than
+     just scrolling. The chips inside stay on one line via their own
+     white-space: nowrap, so this box only needs to shrink, not scroll,
+     in the (now rare) case its content doesn't fully fit. The
+     mobile/tablet breakpoints below override flex-basis to 100% once
+     this moves to its own row, where none of this applies. */
   flex: 1 1 0;
   min-width: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
 }
-.navbar-controls::-webkit-scrollbar { display: none; }
 
 .navbar-right {
   display: flex;
