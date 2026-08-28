@@ -116,26 +116,32 @@ const GROUP_COMPANIES = [
   },
 ];
 
-// The group's five core values, as published in its Code of Conduct.
+// The group's five core values, as published in its Code of Conduct. Colors
+// match the segments of the values ribbon graphic (/assets/core-values.png).
 const CORE_VALUES = [
   {
     name: "Care",
+    color: "#C3D62E",
     blurb: "Fairness and consideration run through everything the group does.",
   },
   {
     name: "Respect",
+    color: "#29ABE2",
     blurb: "Everyone is treated with respect and dignity.",
   },
   {
     name: "Lead",
+    color: "#E63946",
     blurb: "Aspiring to lead in everything the group takes on.",
   },
   {
     name: "Honesty",
+    color: "#F5A93F",
     blurb: "Truthfulness, integrity and trust underpin every activity.",
   },
   {
     name: "Courage",
+    color: "#9C2D91",
     blurb: "The willingness to speak up and make bold, principled decisions.",
   },
 ];
@@ -192,12 +198,11 @@ function GroupCompanyCard({ name, sector, color, blurb }) {
   );
 }
 
-function ValueCard({ name, blurb }) {
+function ValueRow({ name, color, blurb }) {
   return (
-    <div className="value-card">
-      <div className="value-icon">{name[0]}</div>
-      <div className="value-name">{name}</div>
-      <p className="value-blurb">{blurb}</p>
+    <div className="value-row" style={{ borderLeftColor: color }}>
+      <div className="value-row-name">{name}</div>
+      <p className="value-row-blurb">{blurb}</p>
     </div>
   );
 }
@@ -243,18 +248,13 @@ export default function AboutPage() {
       </div>
 
       <div className="card">
-        <div className="leadership-intro">
-          <div>
-            <div className="section-label">IGI Holdings</div>
-            <p className="hint">
-              IGI Holdings is the listed holding company behind four independently
-              licensed and regulated businesses - General insurance, Life insurance,
-              Investments, and Securities - each run by its own leadership team
-              under a shared standard of governance and service.
-            </p>
-          </div>
-          
-        </div>
+        <div className="section-label">IGI Holdings</div>
+        <p className="hint">
+          IGI Holdings is the listed holding company behind four independently
+          licensed and regulated businesses - General insurance, Life insurance,
+          Investments, and Securities - each run by its own leadership team
+          under a shared standard of governance and service.
+        </p>
         <div className="leadership-grid">
           {LEADERSHIP.map(p => (
             <LeadershipCard
@@ -316,10 +316,17 @@ export default function AboutPage() {
           Values the group holds higher than self-interest, and expects of
           every company, employee and partner acting under its name.
         </p>
-        <div className="value-grid">
-          {CORE_VALUES.map(v => (
-            <ValueCard key={v.name} name={v.name} blurb={v.blurb} />
-          ))}
+        <div className="values-section">
+          <img
+            src="/assets/core-values.png"
+            alt="Packages Group core values: Care, Respect, Lead, Honesty, Courage"
+            className="values-image"
+          />
+          <div className="value-list">
+            {CORE_VALUES.map(v => (
+              <ValueRow key={v.name} name={v.name} color={v.color} blurb={v.blurb} />
+            ))}
+          </div>
         </div>
         <p className="mission-quote">
           Packages Group's mission is to raise the everyday quality of life
