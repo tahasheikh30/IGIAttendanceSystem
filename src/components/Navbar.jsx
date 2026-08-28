@@ -248,7 +248,7 @@ function PeriodPicker({ period, onSelect }) {
     <div className="company-dropdown" ref={rootRef}>
       <button
         type="button"
-        className={"chip" + (period ? " chip-active" : "")}
+        className={"chip chip-period" + (period ? " chip-active" : "")}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
