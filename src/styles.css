@@ -686,7 +686,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   display: flex; justify-content: flex-end; z-index: 50;
 }
 .drawer {
-  width: min(640px, 94vw); background: var(--surface); height: 100%;
+  width: min(600px, 93vw); background: var(--surface); height: 100%;
   padding: 26px 28px; overflow-y: auto; box-shadow: -8px 0 24px rgba(0,0,0,0.08);
 }
 .drawer-loading { color: var(--text-muted); }
