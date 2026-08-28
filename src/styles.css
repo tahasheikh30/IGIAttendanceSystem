@@ -121,7 +121,7 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 .page-sub { font-size: 13px; color: var(--text-secondary); margin: 4px 0 0; }
 
 .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.range-toggle { display: flex; gap: 6px; }
+.range-toggle { display: flex; gap: 6px; align-items: center; }
 
 .btn-primary {
   display: inline-flex; align-items: center; gap: 6px;
@@ -139,6 +139,8 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
   border: 1px solid var(--border); background: var(--surface);
   border-radius: 999px; padding: 5px 12px; font-size: 12.5px; color: var(--text-secondary);
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
 }
 .chip:hover { border-color: var(--accent); background: var(--accent-light); color: var(--accent-dark); }
