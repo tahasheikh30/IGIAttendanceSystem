@@ -890,7 +890,8 @@ h1 {
 
 /* ---------- App footer ---------- */
 .app-footer {
-  margin-top: 48px;
+  margin-top: 0;
+  flex-shrink: 0;
   position: relative;
 }
 /* Echoes .brand-strip up top, so the app feels bookended by the same

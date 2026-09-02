@@ -40,9 +40,14 @@ function AuthedApp() {
               {isAdmin && <Route path="/users" element={<UsersPage />} />}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
-            <Footer />
           </main>
         </div>
+        {/* Lives outside app-body (not inside main-content) so it spans the
+            full page width instead of being capped at main-content's
+            1180px reading width, and so app-body's flex:1 can push it down
+            to sit flush against the bottom of the viewport on short pages
+            instead of leaving a gap of page background beneath it. */}
+        <Footer />
         {searchEmp && <EmployeeDrawer empNo={searchEmp} onClose={() => setSearchEmp(null)} />}
       </div>
     </RangeProvider>
