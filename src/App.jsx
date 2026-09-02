@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import Overview from "./pages/Overview";
@@ -9,7 +9,9 @@ import AboutPage from "./pages/AboutPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import LoginPage from "./pages/LoginPage";
 import UsersPage from "./pages/UsersPage";
+import NotFoundPage from "./pages/NotFoundPage";
 import EmployeeDrawer from "./components/EmployeeDrawer";
+import Footer from "./components/Footer";
 import { RangeProvider } from "./context/RangeContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
@@ -36,8 +38,9 @@ function AuthedApp() {
               <Route path="/about" element={<AboutPage />} />
               {isAdmin && <Route path="/upload" element={<UploadPage />} />}
               {isAdmin && <Route path="/users" element={<UsersPage />} />}
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
+            <Footer />
           </main>
         </div>
         {searchEmp && <EmployeeDrawer empNo={searchEmp} onClose={() => setSearchEmp(null)} />}

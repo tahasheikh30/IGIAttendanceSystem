@@ -8,14 +8,22 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Overview() {
   const [data, setData] = useState(null);
-  const { days, company, period } = useRange();
+  // Separate from `data` itself: without this, the very first render (data
+  // still null, request in flight) showed the same "No data yet - upload
+  // an export" message as a genuinely empty account, which reads as "this
+  // app is broken/empty" during an ordinary page load rather than "still
+  // loading". Only guards the first fetch, matching how the other pages
+  // (DepartmentPage, AnalyticsPage) treat later range/company changes --
+  // those keep showing the previous data rather than flashing a spinner.
+  const [loading, setLoading] = useState(true);
+  const { days, company } = useRange();
   const { isAdmin, isHod } = useAuth();
   const [openEmp, setOpenEmp] = useState(null);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    getOverview(days, company || null, period).then(setData);
-  }, [days, company, period]);
+    getOverview(days, company || null).then(setData).finally(() => setLoading(false));
+  }, [days, company]);
 
   const filteredFlagged = useMemo(() => {
     if (!data) return [];
@@ -24,6 +32,10 @@ export default function Overview() {
     const q = search.toLowerCase();
     return list.filter(e => e.name.toLowerCase().includes(q) || e.dept.toLowerCase().includes(q));
   }, [data, search]);
+
+  if (loading) {
+    return <div className="empty-state">Loading…</div>;
+  }
 
   if (!data) {
     return (
@@ -47,7 +59,7 @@ export default function Overview() {
               : isHod
                 ? (company ? `${company} · ` : "Your companies · ")
                 : "Your departments · "}
-            attendance · {data.windowLabel || `Last ${days} days`}
+            attendance, last {days} days
           </p>
         </div>
       </div>
