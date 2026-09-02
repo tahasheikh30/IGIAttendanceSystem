@@ -117,7 +117,17 @@ body {
 .main-content { flex: 1; padding: 28px 36px 60px; max-width: 1180px; }
 
 .page-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
-h1 { font-size: 22px; font-weight: 600; margin: 0; }
+h1 {
+  font-size: 23px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent) 55%, #2C93E0);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--accent-dark); /* fallback for browsers without background-clip: text */
+  -webkit-text-fill-color: transparent;
+}
 .page-sub { font-size: 13px; color: var(--text-secondary); margin: 4px 0 0; }
 
 .header-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -880,22 +890,95 @@ h1 { font-size: 22px; font-weight: 600; margin: 0; }
 
 /* ---------- App footer ---------- */
 .app-footer {
+  margin-top: 48px;
+  border-radius: 16px 16px 0 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 -8px 24px rgba(16, 24, 40, 0.04);
+}
+/* Echoes .brand-strip up top, so the app feels bookended by the same
+   accent gradient at both the very top and very bottom of the page. */
+.app-footer::before {
+  content: "";
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent) 55%, #2C93E0);
+}
+
+.app-footer-top {
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr 1.2fr 1.2fr;
+  gap: 24px;
+  padding: 28px 32px 22px;
+}
+
+.app-footer-brand { display: flex; align-items: center; gap: 12px; }
+.app-footer-logo { width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; }
+.app-footer-brand-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--accent-dark), var(--accent) 60%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--accent-dark);
+  -webkit-text-fill-color: transparent;
+}
+.app-footer-brand-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+
+.app-footer-col { display: flex; flex-direction: column; gap: 7px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; min-width: 0; }
+.app-footer-col-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.app-footer-col a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  width: fit-content;
+  transition: color .15s ease;
+}
+.app-footer-col a:hover { color: var(--accent); }
+
+.app-footer-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 40px;
-  padding-top: 16px;
+  padding: 14px 32px;
   border-top: 1px solid var(--border);
-  font-size: 12px;
+  background: var(--surface-muted);
+  font-size: 11.5px;
   color: var(--text-muted);
 }
-.app-footer-links a { color: var(--text-muted); text-decoration: none; }
-.app-footer-links a:hover { color: var(--accent); text-decoration: underline; }
+.app-footer-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  color: var(--accent-dark);
+}
+.app-footer-tag::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #2C93E0);
+  flex-shrink: 0;
+}
 
+@media (max-width: 860px) {
+  .app-footer-top { grid-template-columns: 1fr 1fr; }
+}
 @media (max-width: 480px) {
-  .app-footer { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .app-footer-top { grid-template-columns: 1fr; padding: 22px 20px 18px; gap: 18px; }
+  .app-footer-bottom { flex-direction: column; align-items: flex-start; padding: 12px 20px; }
 }
 
 /* ---------- 404 page ---------- */
