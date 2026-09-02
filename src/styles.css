@@ -891,13 +891,7 @@ h1 {
 /* ---------- App footer ---------- */
 .app-footer {
   margin-top: 48px;
-  border-radius: 16px 16px 0 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-bottom: none;
-  overflow: hidden;
   position: relative;
-  box-shadow: 0 -8px 24px rgba(16, 24, 40, 0.04);
 }
 /* Echoes .brand-strip up top, so the app feels bookended by the same
    accent gradient at both the very top and very bottom of the page. */
