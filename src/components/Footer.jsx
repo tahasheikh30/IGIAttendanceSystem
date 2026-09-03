@@ -23,7 +23,7 @@ export default function Footer() {
         <div className="app-footer-col">
           <div className="app-footer-col-title">Links</div>
           <Link to="/about">About</Link>
-          <a href="mailto:contact.center@igi.com.pk">Contact</a>
+          <a href="mailto:hadia.tariq@igi.com.pk">Contact</a>
         </div>
 
         <div className="app-footer-col">
