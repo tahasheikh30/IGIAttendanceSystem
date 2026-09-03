@@ -515,7 +515,8 @@ h1 {
 .company-dropdown-label {
   font-size: 13px;
   font-weight: 600;
-  max-width: 200px;
+  max-width: 110px;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
