@@ -702,9 +702,12 @@ h1 {
 .leader-profile-body { font-size: 13.5px; line-height: 1.6; margin: 0 0 14px; max-width: 640px; }
 .leader-facts {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin: 0;
+}
+@media (max-width: 760px) {
+  .leader-facts { grid-template-columns: 1fr; }
 }
 .leader-fact {
   background: var(--surface-muted);
