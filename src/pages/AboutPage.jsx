@@ -30,6 +30,37 @@ const LEADERSHIP = [
   },
 ];
 
+// Facts from the Packages Limited and Nestlé Pakistan board profiles and PACRA rating reports.
+const HYDER_ALI = {
+  name: "Syed Hyder Ali",
+  role: "Managing Director & CEO, Packages Limited. CEO, IGI Holdings",
+  img: "/assets/syed-hyder-ali.webp",
+  summary:
+    "Syed Hyder Ali joined Packages Limited in July 1987 and today leads both Packages Limited and IGI Holdings as chief executive. A chemical engineer by training, he spent his early career in paper production and packaging, including work on the pulp and paper mill that uses wheat straw as its raw material.",
+  facts: [
+    {
+      label: "Education",
+      value:
+        "BSc Chemical Engineering, University of Michigan (1979); MSc in paper chemistry (1981); Management Development Program, Harvard Business School (1997).",
+    },
+    {
+      label: "Group boards",
+      value:
+        "Nestlé Pakistan, Sanofi-Aventis Pakistan, Tetra Pak Pakistan, Tri-Pack Films, Packages Lanka, IGI General Insurance and IGI Life, among others.",
+    },
+    {
+      label: "Education and philanthropy",
+      value:
+        "Board roles with LUMS, the Babar Ali Foundation, Ali Institute of Education, Pakistan Centre for Philanthropy, National Management Foundation and WWF-Pakistan. Trustee of the Packages Foundation.",
+    },
+    {
+      label: "Industry",
+      value:
+        "Member of the Pakistan Business Council and the International Chamber of Commerce Pakistan.",
+    },
+  ],
+};
+
 // The wider Packages Group companies IGI Holdings sits alongside. IGI's own
 // entities (Insurance, Life, Securities) are already covered in the
 // leadership grid above, so this list is the rest of the group.
@@ -148,6 +179,42 @@ function initials(name) {
 // Renders the given photo; if it's missing or fails to load (no file yet
 // placed under /public/assets), falls back to an initials avatar instead
 // of a broken image icon.
+function LeaderProfile({ name, role, img, summary, facts }) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const showPhoto = img && !imgFailed;
+
+  return (
+    <div className="card leader-profile">
+      {showPhoto ? (
+        <img
+          src={img}
+          alt={name}
+          className="leader-profile-portrait"
+          onError={() => setImgFailed(true)}
+        />
+      ) : (
+        <div className="leader-profile-portrait leader-profile-avatar" role="img" aria-label={name}>
+          {initials(name)}
+        </div>
+      )}
+      <div className="leader-profile-content">
+        <div className="leader-profile-eyebrow">Leading the group today</div>
+        <h2 className="leader-profile-heading">{name}</h2>
+        <div className="leader-profile-role">{role}</div>
+        <p className="leader-profile-body">{summary}</p>
+        <dl className="leader-facts">
+          {facts.map(f => (
+            <div key={f.label} className="leader-fact">
+              <dt>{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  );
+}
+
 function LeadershipCard({ name, role, blurb, img }) {
   const [imgFailed, setImgFailed] = useState(false);
   const showPhoto = img && !imgFailed;
@@ -233,6 +300,14 @@ export default function AboutPage() {
           </p>
         </div>
       </div>
+
+      <LeaderProfile
+        name={HYDER_ALI.name}
+        role={HYDER_ALI.role}
+        img={HYDER_ALI.img}
+        summary={HYDER_ALI.summary}
+        facts={HYDER_ALI.facts}
+      />
 
       <div className="card">
         <div className="section-label">IGI Holdings</div>

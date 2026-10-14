@@ -680,6 +680,41 @@ h1 {
 .tribute-heading { font-size: 24px; font-weight: 600; margin: 4px 0 2px; }
 .tribute-subheading { font-size: 13.5px; color: rgba(255,255,255,0.8); margin-bottom: 14px; }
 .tribute-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 10px; max-width: 560px; }
+
+/* Current group leader profile, sits under the tribute card */
+.leader-profile { display: flex; gap: 28px; padding: 28px 32px; }
+.leader-profile-portrait {
+  width: 140px; height: 140px; border-radius: 50%;
+  object-fit: cover; flex-shrink: 0;
+  border: 3px solid var(--accent-light);
+  box-shadow: 0 0 0 1px var(--border);
+}
+.leader-profile-avatar {
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--accent-light), #fff);
+  color: var(--accent-dark);
+  font-weight: 700; font-size: 34px; letter-spacing: 0.02em;
+}
+.leader-profile-content { min-width: 0; }
+.leader-profile-eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.leader-profile-heading { font-size: 24px; font-weight: 600; margin: 4px 0 2px; }
+.leader-profile-role { font-size: 13.5px; color: var(--text-muted); margin-bottom: 14px; }
+.leader-profile-body { font-size: 13.5px; line-height: 1.6; margin: 0 0 14px; max-width: 640px; }
+.leader-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+.leader-fact {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 10px 14px;
+}
+.leader-fact dt { font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-dark); margin-bottom: 3px; }
+.leader-fact dd { margin: 0; font-size: 12.5px; line-height: 1.55; }
 /* ---------- Leadership grid ---------- */
 
 .leadership-grid {
@@ -811,6 +846,7 @@ h1 {
 
 @media (max-width: 640px) {
   .tribute-card { flex-direction: column; align-items: flex-start; }
+  .leader-profile { flex-direction: column; align-items: flex-start; padding: 22px; }
 }
 
 /* ---------- Analytics page ---------- */
