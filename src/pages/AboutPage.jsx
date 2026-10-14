@@ -30,6 +30,38 @@ const LEADERSHIP = [
   },
 ];
 
+// Facts from the Packages Group and Nestlé Pakistan biographies, plus Dawn,
+// Gulf News and The Friday Times profiles published around his 100th birthday.
+const BABAR_ALI = {
+  highlights: [
+    { value: "1926", label: "Born in Lahore" },
+    { value: "1956", label: "Packages Limited established" },
+    { value: "1985", label: "Led the founding of LUMS" },
+  ],
+  facts: [
+    {
+      label: "Business",
+      value:
+        "Founded or set up Packages Limited, Milkpak (now Nestlé Pakistan), Tetra Pak Pakistan, IGI Insurance, Tri-Pack Films and IGI Investment Bank. Chairman roles at Sanofi-Aventis Pakistan, Siemens Pakistan and Coca-Cola Beverages Pakistan.",
+    },
+    {
+      label: "Institutions",
+      value:
+        "First Pro-Chancellor of LUMS. Set up the Babar Ali Foundation (1985) and the Ali Institute of Education (1992), and sat on the boards of Aitchison College, Kinnaird College and the Lahore School of Economics.",
+    },
+    {
+      label: "Public service and global roles",
+      value:
+        "Caretaker Finance Minister (1993) and chairman of the National Fertiliser Corporation. International President of WWF from 1996 to 1999, succeeding Prince Philip. Founding member of Harvard's South Asia Initiative.",
+    },
+    {
+      label: "Honours",
+      value:
+        "OBE (1997) and an honorary Doctor of Laws from McGill University (1997), with honours from the governments of Sweden and the Netherlands. Elected to the American Academy of Arts and Sciences in 2020. Author of the autobiography Learning from Others.",
+    },
+  ],
+};
+
 // Facts from the Packages Limited and Nestlé Pakistan board profiles and PACRA rating reports.
 const HYDER_ALI = {
   name: "Syed Hyder Ali",
@@ -312,11 +344,22 @@ export default function AboutPage() {
             founding vision, institutions built to last, run with discipline and
             integrity.
           </p>
-          <p className="tribute-body">
-            This system is a small, practical extension of that principle -
-            using accurate, well-organized data to help the people who keep the
-            company running do their work a little better.
-          </p>
+          <div className="leader-highlights">
+            {BABAR_ALI.highlights.map(h => (
+              <div key={h.label} className="leader-highlight">
+                <div className="leader-highlight-value">{h.value}</div>
+                <div className="leader-highlight-label">{h.label}</div>
+              </div>
+            ))}
+          </div>
+          <dl className="leader-facts">
+            {BABAR_ALI.facts.map(f => (
+              <div key={f.label} className="leader-fact">
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
 

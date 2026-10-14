@@ -679,8 +679,9 @@ h1 {
 .tribute-eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
 .tribute-heading { font-size: 24px; font-weight: 600; margin: 4px 0 2px; }
 .tribute-subheading { font-size: 13.5px; color: rgba(255,255,255,0.8); margin-bottom: 14px; }
-.tribute-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 10px; max-width: 560px; }
-
+.tribute-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 20px 0; }
+.tribute-content { flex: 1; min-width: 0; }
+.tribute-content .leader-highlights { margin-top: 18px; }
 /* Current group leader profile, mirrors the tribute card above it */
 .leader-profile {
   position: relative;
@@ -715,7 +716,7 @@ h1 {
   border: 1px solid rgba(255,255,255,0.22);
   color: #fff;
 }
-.leader-profile-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 20px; max-width: 620px; }
+.leader-profile-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 20px; }
 .leader-highlights { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
 .leader-highlight {
   min-width: 130px;
