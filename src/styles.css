@@ -681,25 +681,73 @@ h1 {
 .tribute-subheading { font-size: 13.5px; color: rgba(255,255,255,0.8); margin-bottom: 14px; }
 .tribute-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 10px; max-width: 560px; }
 
-/* Current group leader profile, sits under the tribute card */
-.leader-profile { display: flex; gap: 28px; padding: 28px 32px; }
+/* Current group leader profile, mirrors the tribute card above it */
+.leader-profile {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  background: linear-gradient(225deg, #12222F 0%, #1C3A52 55%, #1C74B8 100%);
+  border-radius: 16px;
+  padding: 36px 40px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+.leader-profile::before {
+  content: "";
+  position: absolute;
+  top: -120px; right: -80px;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0) 70%);
+  pointer-events: none;
+}
+.leader-profile-content { position: relative; min-width: 0; flex: 1; }
+.leader-profile-eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.65); }
+.leader-profile-heading { font-size: 28px; font-weight: 600; margin: 4px 0 12px; }
+.leader-profile-roles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.leader-profile-role {
+  font-size: 12.5px; font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #fff;
+}
+.leader-profile-body { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); margin: 0 0 20px; max-width: 620px; }
+.leader-highlights { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.leader-highlight {
+  min-width: 130px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+.leader-highlight-value { font-size: 26px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+.leader-highlight-label { font-size: 11.5px; color: rgba(255,255,255,0.72); margin-top: 3px; }
+.leader-profile-portrait-wrap {
+  position: relative;
+  flex-shrink: 0;
+  align-self: flex-start;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 25%, #F1F8FE 0%, #A9D3F2 60%, #6FB0E0 100%);
+  border: 3px solid rgba(255,255,255,0.5);
+}
 .leader-profile-portrait {
-  width: 140px; height: 140px; border-radius: 50%;
-  object-fit: cover; flex-shrink: 0;
-  border: 3px solid var(--accent-light);
-  box-shadow: 0 0 0 1px var(--border);
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  mix-blend-mode: multiply;
 }
 .leader-profile-avatar {
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, var(--accent-light), #fff);
-  color: var(--accent-dark);
-  font-weight: 700; font-size: 34px; letter-spacing: 0.02em;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-weight: 700; font-size: 44px; letter-spacing: 0.02em;
 }
-.leader-profile-content { min-width: 0; }
-.leader-profile-eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
-.leader-profile-heading { font-size: 24px; font-weight: 600; margin: 4px 0 2px; }
-.leader-profile-role { font-size: 13.5px; color: var(--text-muted); margin-bottom: 14px; }
-.leader-profile-body { font-size: 13.5px; line-height: 1.6; margin: 0 0 14px; max-width: 640px; }
 .leader-facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -710,14 +758,14 @@ h1 {
   .leader-facts { grid-template-columns: 1fr; }
 }
 .leader-fact {
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 10px 10px 0;
-  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-top: 3px solid #5DB6F0;
+  border-radius: 10px;
+  padding: 12px 14px;
 }
-.leader-fact dt { font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-dark); margin-bottom: 3px; }
-.leader-fact dd { margin: 0; font-size: 12.5px; line-height: 1.55; }
+.leader-fact dt { font-size: 11.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #9ED3F7; margin-bottom: 4px; }
+.leader-fact dd { margin: 0; font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,0.88); }
 /* ---------- Leadership grid ---------- */
 
 .leadership-grid {
@@ -849,7 +897,12 @@ h1 {
 
 @media (max-width: 640px) {
   .tribute-card { flex-direction: column; align-items: flex-start; }
-  .leader-profile { flex-direction: column; align-items: flex-start; padding: 22px; }
+  .leader-profile { flex-direction: column; align-items: flex-start; padding: 24px; gap: 20px; }
+  .leader-profile-portrait-wrap { width: 140px; height: 140px; }
+  .leader-highlights { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; }
+  .leader-highlight { min-width: 0; padding: 10px 12px; }
+  .leader-highlight-value { font-size: 20px; }
+  .leader-highlight-label { font-size: 10.5px; }
 }
 
 /* ---------- Analytics page ---------- */

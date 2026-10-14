@@ -33,8 +33,13 @@ const LEADERSHIP = [
 // Facts from the Packages Limited and Nestlé Pakistan board profiles and PACRA rating reports.
 const HYDER_ALI = {
   name: "Syed Hyder Ali",
-  role: "Managing Director & CEO, Packages Limited. CEO, IGI Holdings",
+  roles: ["Managing Director & CEO, Packages Limited", "CEO, IGI Holdings"],
   img: "/assets/syed-hyder-ali.webp",
+  highlights: [
+    { value: "1979", label: "BSc, University of Michigan" },
+    { value: "1987", label: "Joined Packages Limited" },
+    { value: "1997", label: "Harvard Business School MDP" },
+  ],
   summary:
     "Syed Hyder Ali joined Packages Limited in July 1987 and today leads both Packages Limited and IGI Holdings as chief executive. A chemical engineer by training, he spent his early career in paper production and packaging, including work on the pulp and paper mill that uses wheat straw as its raw material.",
   facts: [
@@ -179,29 +184,43 @@ function initials(name) {
 // Renders the given photo; if it's missing or fails to load (no file yet
 // placed under /public/assets), falls back to an initials avatar instead
 // of a broken image icon.
-function LeaderProfile({ name, role, img, summary, facts }) {
+function LeaderProfile({ name, roles, img, summary, facts, highlights }) {
   const [imgFailed, setImgFailed] = useState(false);
   const showPhoto = img && !imgFailed;
 
   return (
-    <div className="card leader-profile">
-      {showPhoto ? (
-        <img
-          src={img}
-          alt={name}
-          className="leader-profile-portrait"
-          onError={() => setImgFailed(true)}
-        />
-      ) : (
-        <div className="leader-profile-portrait leader-profile-avatar" role="img" aria-label={name}>
-          {initials(name)}
-        </div>
-      )}
+    <div className="leader-profile">
+      <div className="leader-profile-portrait-wrap">
+        {showPhoto ? (
+          <img
+            src={img}
+            alt={name}
+            className="leader-profile-portrait"
+            onError={() => setImgFailed(true)}
+          />
+        ) : (
+          <div className="leader-profile-portrait leader-profile-avatar" role="img" aria-label={name}>
+            {initials(name)}
+          </div>
+        )}
+      </div>
       <div className="leader-profile-content">
         <div className="leader-profile-eyebrow">Leading the group today</div>
         <h2 className="leader-profile-heading">{name}</h2>
-        <div className="leader-profile-role">{role}</div>
+        <div className="leader-profile-roles">
+          {roles.map(r => (
+            <span key={r} className="leader-profile-role">{r}</span>
+          ))}
+        </div>
         <p className="leader-profile-body">{summary}</p>
+        <div className="leader-highlights">
+          {highlights.map(h => (
+            <div key={h.label} className="leader-highlight">
+              <div className="leader-highlight-value">{h.value}</div>
+              <div className="leader-highlight-label">{h.label}</div>
+            </div>
+          ))}
+        </div>
         <dl className="leader-facts">
           {facts.map(f => (
             <div key={f.label} className="leader-fact">
@@ -303,10 +322,11 @@ export default function AboutPage() {
 
       <LeaderProfile
         name={HYDER_ALI.name}
-        role={HYDER_ALI.role}
+        roles={HYDER_ALI.roles}
         img={HYDER_ALI.img}
         summary={HYDER_ALI.summary}
         facts={HYDER_ALI.facts}
+        highlights={HYDER_ALI.highlights}
       />
 
       <div className="card">
