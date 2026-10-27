@@ -16,25 +16,44 @@ export default function Overview() {
   // (DepartmentPage, AnalyticsPage) treat later range/company changes --
   // those keep showing the previous data rather than flashing a spinner.
   const [loading, setLoading] = useState(true);
-  const { days, company } = useRange();
+  const { days, company, period } = useRange();
   const { isAdmin, isHod } = useAuth();
   const [openEmp, setOpenEmp] = useState(null);
   const [search, setSearch] = useState("");
+  // A failed request is shown as its own state rather than as "No data yet",
+  // which would tell the user their account is empty when it is the request
+  // that failed.
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    getOverview(days, company || null).then(setData).finally(() => setLoading(false));
-  }, [days, company]);
+    let cancelled = false;
+    setFailed(false);
+    getOverview(days, company || null, period)
+      .then(d => { if (!cancelled) setData(d); })
+      .catch(() => { if (!cancelled) setFailed(true); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [days, company, period]);
 
   const filteredFlagged = useMemo(() => {
     if (!data) return [];
     const list = data.flaggedEmployees;
     if (!search.trim()) return list;
-    const q = search.toLowerCase();
+    const q = search.trim().toLowerCase();
     return list.filter(e => e.name.toLowerCase().includes(q) || e.dept.toLowerCase().includes(q));
   }, [data, search]);
 
   if (loading) {
     return <div className="empty-state">Loading…</div>;
+  }
+
+  if (failed && !data) {
+    return (
+      <div className="empty-state" role="alert">
+        <div className="empty-title">Couldn't load the overview</div>
+        <p>Check your connection and try again.</p>
+      </div>
+    );
   }
 
   if (!data) {
@@ -59,7 +78,7 @@ export default function Overview() {
               : isHod
                 ? (company ? `${company} · ` : "Your companies · ")
                 : "Your departments · "}
-            attendance, last {days} days
+            {period ? `attendance, pay period ${period}` : `attendance, last ${days} days`}
           </p>
         </div>
       </div>

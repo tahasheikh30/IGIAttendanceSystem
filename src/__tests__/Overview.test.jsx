@@ -27,18 +27,40 @@ describe("loading and empty states", () => {
   it("asks for 30 days and no company to begin with", async () => {
     show();
     await screen.findByText("Overview");
-    expect(api.current.getOverview).toHaveBeenCalledWith(30, null);
+    expect(api.current.getOverview).toHaveBeenCalledWith(30, null, null);
   });
-  it("a failed request ends loading and shows the empty state (and does not throw)", async () => {
+  it("a failed request ends loading and shows an error, not the empty-account message", async () => {
     api.current.getOverview.mockRejectedValue(axiosError(500));
     const seen = [];
-    const h = (e) => { seen.push(e); e.preventDefault?.(); };
+    const h = (e) => { seen.push(e); };
     process.on("unhandledRejection", h);
     show();
-    expect(await screen.findByText("No data yet")).toBeInTheDocument();
-    expect(screen.getByText("Upload an attendance export to see the overview.")).toBeInTheDocument();
+    expect(await screen.findByText("Couldn't load the overview")).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.queryByText("No data yet")).toBeNull();
+    expect(screen.queryByText("Loading…")).toBeNull();
     await new Promise((r) => setTimeout(r, 10));
     process.off("unhandledRejection", h);
+    expect(seen).toEqual([]);                      // the rejection is handled, not left unhandled
+  });
+  it("recovers when a later request succeeds after a failure", async () => {
+    api.current.getOverview.mockRejectedValueOnce(axiosError(500));
+    const { useRange } = await import("../context/RangeContext");
+    function Pick() { const { setDays } = useRange(); return <button onClick={() => setDays(90)}>pick</button>; }
+    renderWithProviders(<><Pick /><Overview /></>);
+    await screen.findByText("Couldn't load the overview");
+    fireEvent.click(screen.getByText("pick"));
+    expect(await screen.findByText("Overview")).toBeInTheDocument();
+    expect(screen.queryByText("Couldn't load the overview")).toBeNull();
+  });
+  it("asks for the pay period chosen in the navbar and says so in the subtitle", async () => {
+    const { useRange } = await import("../context/RangeContext");
+    function Pick() { const { setPeriod } = useRange(); return <button onClick={() => setPeriod("2026-10")}>pick</button>; }
+    renderWithProviders(<><Pick /><Overview /></>);
+    await screen.findByText("Overview");
+    fireEvent.click(screen.getByText("pick"));
+    expect(await screen.findByText(/attendance, pay period 2026-10/)).toBeInTheDocument();
+    expect(api.current.getOverview).toHaveBeenLastCalledWith(30, null, "2026-10");
   });
 });
 
@@ -98,7 +120,7 @@ describe("subtitle by role", () => {
     await screen.findByText("Overview");
     fireEvent.click(screen.getByText("pick"));
     expect(await screen.findByText("IGI Life · attendance, last 30 days")).toBeInTheDocument();
-    expect(api.current.getOverview).toHaveBeenLastCalledWith(30, "IGI Life");
+    expect(api.current.getOverview).toHaveBeenLastCalledWith(30, "IGI Life", null);
   });
   it("follows the day count chosen elsewhere and re-fetches", async () => {
     function Pick() { const { setDays } = useRange(); return <button onClick={() => setDays(90)}>pick</button>; }
@@ -106,7 +128,7 @@ describe("subtitle by role", () => {
     await screen.findByText("Overview");
     fireEvent.click(screen.getByText("pick"));
     expect(await screen.findByText(/attendance, last 90 days/)).toBeInTheDocument();
-    expect(api.current.getOverview).toHaveBeenLastCalledWith(90, null);
+    expect(api.current.getOverview).toHaveBeenLastCalledWith(90, null, null);
   });
 });
 

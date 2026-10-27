@@ -167,7 +167,7 @@ describe("shared range", () => {
     open();
     await screen.findByRole("heading", { name: "Overview" });
     fireEvent.click(screen.getByRole("button", { name: "90d" }));
-    await waitFor(() => expect(api.current.getOverview).toHaveBeenLastCalledWith(90, null));
+    await waitFor(() => expect(api.current.getOverview).toHaveBeenLastCalledWith(90, null, null));
     fireEvent.click(screen.getByRole("link", { name: "Analytics" }));
     await waitFor(() => expect(api.current.getAnalytics).toHaveBeenLastCalledWith(90, null, null));
   });
@@ -176,7 +176,7 @@ describe("shared range", () => {
     await screen.findByRole("heading", { name: "Overview" });
     fireEvent.click(await screen.findByRole("button", { name: /All companies/ }));
     fireEvent.click(screen.getByRole("option", { name: /IGI Life/ }));
-    await waitFor(() => expect(api.current.getOverview).toHaveBeenLastCalledWith(30, "IGI Life"));
+    await waitFor(() => expect(api.current.getOverview).toHaveBeenLastCalledWith(30, "IGI Life", null));
     await waitFor(() => expect(api.current.getDepartments).toHaveBeenLastCalledWith("IGI Life"));
   });
 });

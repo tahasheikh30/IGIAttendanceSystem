@@ -301,7 +301,7 @@ export default function UsersPage() {
         <table className="data-table">
           <thead>
             <tr>
-              <th>Name</th><th>Username</th><th>Role</th><th>Access</th><th>Status</th><th></th>
+              <th>Name</th><th>Username</th><th>Role</th><th>Access</th><th>Status</th><th><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>

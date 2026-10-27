@@ -90,7 +90,7 @@ export default function UploadPage() {
         <div className="section-label">Upload history</div>
         <table className="data-table">
           <thead>
-            <tr><th>File</th><th>Uploaded</th><th>Period</th><th>Rows</th><th>Employees</th><th></th></tr>
+            <tr><th>File</th><th>Uploaded</th><th>Period</th><th>Rows</th><th>Employees</th><th><span className="sr-only">Actions</span></th></tr>
           </thead>
           <tbody>
             {history.map(h => (

@@ -20,7 +20,7 @@ import { resetApiMock } from "../test/apiMock";
 beforeEach(() => resetApiMock(api.current));
 
 // Four real gaps found by this suite (see "known accessibility gaps" at the bottom). Everything else must be clean,
-// so these are excluded from the per-screen checks and asserted separately as it.fails().
+// so these are excluded from the per-screen checks and asserted separately as it().
 const KNOWN = ["landmark-unique", "empty-table-header", "select-name", "aria-input-field-name"];
 
 async function violations(node = document.body, only = null) {
@@ -106,23 +106,23 @@ describe("accessibility (axe)", () => {
 });
 
 
-describe("known accessibility gaps", () => {
-  it.fails("the two <nav> landmarks in the sidebar have distinct names", async () => {
+describe("accessibility regressions", () => {
+  it("the two <nav> landmarks in the sidebar have distinct names", async () => {
     app("/");
     await screen.findByText("Employees needing attention (2)");
     expect(await violations(document.body, ["landmark-unique"])).toEqual([]);
   });
-  it.fails("table header cells are never empty (the action column needs a visible or hidden label)", async () => {
+  it("table header cells are never empty (the action column needs a visible or hidden label)", async () => {
     app("/upload");
     await screen.findByText("october.xlsx");
     expect(await violations(document.body, ["empty-table-header"])).toEqual([]);
   });
-  it.fails("the department page's sort <select> has an accessible name", async () => {
+  it("the department page's sort <select> has an accessible name", async () => {
     app("/department/Finance?company=IGI%20General");
     await screen.findByText("Employees", { selector: ".section-label" });
     expect(await violations(document.body, ["select-name"])).toEqual([]);
   });
-  it.fails("the open company and pay period lists have an accessible name", async () => {
+  it("the open company and pay period lists have an accessible name", async () => {
     app("/");
     await screen.findByText("Employees needing attention (2)");
     fireEvent.click(await screen.findByRole("button", { name: /All companies/ }));
