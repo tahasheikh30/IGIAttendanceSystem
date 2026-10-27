@@ -94,7 +94,7 @@ function EmployeeSearch({ onSelect }) {
       </div>
 
       {showMenu && (
-        <div className="employee-search-menu" role="listbox">
+        <div className="employee-search-menu" role="listbox" aria-label="Employee search results">
           {loading && <div className="employee-search-status">Searching…</div>}
           {!loading && errored && <div className="employee-search-status">Couldn't search - try again.</div>}
           {!loading && !errored && results.length === 0 && (
@@ -173,7 +173,7 @@ function CompanyDropdown({ companies, value, onChange }) {
       </button>
 
       {open && (
-        <div className="company-dropdown-menu" role="listbox">
+        <div className="company-dropdown-menu" role="listbox" aria-label="Companies">
           <button
             type="button"
             role="option"
@@ -257,7 +257,7 @@ function PeriodPicker({ period, onSelect }) {
       </button>
 
       {open && (
-        <div className="company-dropdown-menu" role="listbox">
+        <div className="company-dropdown-menu" role="listbox" aria-label="Pay periods">
           {periodsList === null && <div className="employee-search-status">Loading…</div>}
           {periodsList?.length === 0 && <div className="employee-search-status">No periods available</div>}
           {periodsList?.map(p => (

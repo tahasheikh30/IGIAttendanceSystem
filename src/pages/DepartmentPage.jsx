@@ -48,8 +48,8 @@ export default function DepartmentPage() {
     if (!data) return [];
     let list = data.employees;
     if (search.trim()) {
-      const q = search.toLowerCase();
-      list = list.filter(e => e.name.toLowerCase().includes(q) || e.empNo.includes(q));
+      const q = search.trim().toLowerCase();
+      list = list.filter(e => e.name.toLowerCase().includes(q) || e.empNo.toLowerCase().includes(q));
     }
     return [...list].sort((a, b) => b[sortKey] - a[sortKey]);
   }, [data, search, sortKey]);
@@ -123,7 +123,7 @@ export default function DepartmentPage() {
               onChange={e => setSearch(e.target.value)}
               className="input"
             />
-            <select value={sortKey} onChange={e => setSortKey(e.target.value)} className="select">
+            <select value={sortKey} onChange={e => setSortKey(e.target.value)} className="select" aria-label="Sort employees by">
               <option value="anomalyScore">Sort: anomaly score</option>
               <option value="latePct">Sort: late %</option>
               <option value="otHours">Sort: late hours</option>

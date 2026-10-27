@@ -41,7 +41,7 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <nav className="nav-section">
+      <nav className="nav-section" aria-label="Main">
         <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}>
           Overview
         </NavLink>
@@ -64,7 +64,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="nav-label">{deptsLabel}</div>
-      <nav className="nav-section scroll">
+      <nav className="nav-section scroll" aria-label="Departments">
         {depts.length === 0 && <div className="nav-empty">{emptyLabel}</div>}
         {depts.map(d => (
           <NavLink
